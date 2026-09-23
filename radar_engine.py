@@ -212,15 +212,20 @@ def slugify_team(name):
     return re.sub(r"[^a-z0-9]+","-",s).strip("-")
 
 _STATZ_CACHE = {}
-_STATZ_BUDGET = 50
+_STATZ_BUDGET = 16
+_STATZ_CALLS = 0
 
 def statz_player_pick(home, away):
+    global _STATZ_CALLS
+    if _STATZ_CALLS >= _STATZ_BUDGET: return None
     for team, opp in [(home,away),(away,home)]:
         try:
             slug = slugify_team(team)
             if slug in _STATZ_CACHE:
                 text = _STATZ_CACHE[slug]
             else:
+                if _STATZ_CALLS >= _STATZ_BUDGET: return None
+                _STATZ_CALLS += 1
                 url = f"https://statz.ai/team/{slug}"
                 req = Request(url, headers={"User-Agent":"Mozilla/5.0 EdgeBet-AI/3.1","Accept":"text/html"})
                 with urlopen(req, timeout=6) as r:
