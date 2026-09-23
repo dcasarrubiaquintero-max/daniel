@@ -1,0 +1,95 @@
+"""Cliente 365Scores para EdgeBet.
+Fuente observada: webws.365scores.com/web. No usa una API key.
+Se mantiene separado del motor principal para poder activar 365Scores solo
+cuando la respuesta del endpoint sea válida, sin fabricar datos.
+"""
+import json
+import time
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
+
+BASE = "https://webws.365scores.com/web"
+COMMON = {"appTypeId": 5, "langId": 29, "timezoneName": "America/Bogota"}
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/153 Safari/537.36",
+    "Accept": "application/json,text/plain,*/*",
+    "Referer": "https://www.365scores.com/",
+}
+
+def get_json(path, **params):
+    q = dict(COMMON)
+    q.update(params)
+    url = BASE.rstrip("/") + "/" + path.lstrip("/") + "?" + urlencode(q)
+    req = Request(url, headers=HEADERS)
+    last = None
+    for attempt in range(3):
+        try:
+            with urlopen(req, timeout=20) as r:
+                return json.loads(r.read().decode("utf-8"))
+        except Exception as exc:
+            last = exc
+            if attempt < 2:
+                time.sleep(2 ** attempt)
+    raise last
+
+def game(game_id):
+    return get_json("game/", gameId=game_id).get("game", {})
+
+def player_stats(game_id):
+    g = game(game_id)
+    members = {m.get("id"): m for m in g.get("members", [])}
+    teams = []
+    for side in ("homeCompetitor", "awayCompetitor"):
+        c = g.get(side, {}) or {}
+        players = []
+        for row in (c.get("lineups", {}) or {}).get("members", []) or []:
+            info = members.get(row.get("id"), {})
+            raw = row.get("stats") or []
+            by_name = {x.get("name"): x.get("value") for x in raw if x.get("name")}
+            by_type = {x.get("type"): x.get("value") for x in raw if x.get("type") is not None}
+            players.append({
+                "player_id": row.get("id"),
+                "name": info.get("name") or info.get("shortName"),
+                "starter": row.get("status") == 1 or row.get("statusText") == "Starting",
+                "rating": row.get("ranking"),
+                "stats": by_name,
+                "stats_by_type": by_type,
+            })
+        teams.append({"team_id": c.get("id"), "team": c.get("name"), "players": players})
+    return {"game_id": game_id, "teams": teams}
+
+def shots(game_id):
+    g = game(game_id)
+    events = (g.get("chartEvents") or {}).get("events") or []
+    members = {m.get("id"): m.get("name") for m in g.get("members", [])}
+    out = []
+    for e in events:
+        out.append({
+            "player": members.get(e.get("playerId")),
+            "player_id": e.get("playerId"),
+            "competitor": e.get("competitorNum"),
+            "xg": e.get("xg"),
+            "xgot": e.get("xgot"),
+            "outcome": (e.get("outcome") or {}).get("name"),
+            "minute": e.get("time"),
+        })
+    return {"game_id": game_id, "shots": out}
+
+def lineups(game_id):
+    g = game(game_id)
+    members = {m.get("id"): m for m in g.get("members", [])}
+    result = []
+    for side in ("homeCompetitor", "awayCompetitor"):
+        c = g.get(side, {}) or {}
+        lu = c.get("lineups") or {}
+        result.append({
+            "team": c.get("name"),
+            "status": lu.get("status"),
+            "players": [{
+                "player_id": m.get("id"),
+                "name": (members.get(m.get("id")) or {}).get("name"),
+                "starter": m.get("status") == 1 or m.get("statusText") == "Starting",
+                "position": (m.get("position") or {}).get("name"),
+            } for m in lu.get("members", []) or []]
+        })
+    return {"game_id": game_id, "teams": result}
