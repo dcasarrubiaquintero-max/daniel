@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T15:39:56.745951+00:00",
+  "updated_at": "2026-09-23T15:41:35.369962+00:00",
   "matches": [
     {
       "league": "Amistosos",
@@ -12,7 +12,7 @@
       "why": "Russia: media 17.2; supera la línea en 80% de 5.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T15:38:43.353043+00:00"
+      "generated_at": "2026-09-23T15:41:03.141914+00:00"
     },
     {
       "league": "Amistosos",
@@ -25,33 +25,7 @@
       "why": "Russia: media 17.2; supera la línea en 80% de 5.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T15:39:24.917924+00:00"
-    },
-    {
-      "league": "Amistosos",
-      "match": "Canada vs Chile",
-      "date": "26/09/2026",
-      "time": "18:00 COL",
-      "market": "Canada más de 4.5 córners",
-      "prob": 96.2,
-      "confidence": "ALTA",
-      "why": "Canada: media 9.6; supera la línea en 100% de 5.",
-      "source": "ESPN",
-      "sample": 9,
-      "generated_at": "2026-09-23T15:38:06.769447+00:00"
-    },
-    {
-      "league": "Amistosos",
-      "match": "Canada vs Peru",
-      "date": "03/10/2026",
-      "time": "13:00 COL",
-      "market": "Canada más de 4.5 córners",
-      "prob": 96.2,
-      "confidence": "ALTA",
-      "why": "Canada: media 9.6; supera la línea en 100% de 5.",
-      "source": "ESPN",
-      "sample": 9,
-      "generated_at": "2026-09-23T15:39:29.804311+00:00"
+      "generated_at": "2026-09-23T15:41:21.721290+00:00"
     },
     {
       "league": "Amistosos",
@@ -64,7 +38,7 @@
       "why": "Media reciente 4.71; supera 1.5 en 86% de la muestra.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T15:37:37.498940+00:00"
+      "generated_at": "2026-09-23T15:40:30.570019+00:00"
     },
     {
       "league": "Amistosos",
@@ -77,7 +51,7 @@
       "why": "Brazil: media 15.5; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 8,
-      "generated_at": "2026-09-23T15:37:54.377536+00:00"
+      "generated_at": "2026-09-23T15:40:39.905788+00:00"
     },
     {
       "league": "Amistosos",
@@ -90,7 +64,7 @@
       "why": "Brazil: media 15.5; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 8,
-      "generated_at": "2026-09-23T15:38:40.465113+00:00"
+      "generated_at": "2026-09-23T15:41:02.034953+00:00"
     },
     {
       "league": "Amistosos",
@@ -103,20 +77,33 @@
       "why": "Brazil: media 15.5; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T15:39:22.966385+00:00"
+      "generated_at": "2026-09-23T15:41:20.735727+00:00"
     },
     {
       "league": "Amistosos",
-      "match": "United States vs Chile",
-      "date": "29/09/2026",
-      "time": "19:00 COL",
-      "market": "Más de 1.5 goles",
-      "prob": 92.5,
+      "match": "Canada vs Chile",
+      "date": "26/09/2026",
+      "time": "18:00 COL",
+      "market": "Canada más de 9.5 tiros",
+      "prob": 92.3,
       "confidence": "ALTA",
-      "why": "Media reciente 4.25; supera 1.5 en 100% de la muestra.",
+      "why": "Canada: media 14.8; supera la línea en 100% de 5.",
       "source": "ESPN",
-      "sample": 8,
-      "generated_at": "2026-09-23T15:38:45.871320+00:00"
+      "sample": 9,
+      "generated_at": "2026-09-23T15:40:45.210851+00:00"
+    },
+    {
+      "league": "Amistosos",
+      "match": "Canada vs Peru",
+      "date": "03/10/2026",
+      "time": "13:00 COL",
+      "market": "Canada más de 9.5 tiros",
+      "prob": 92.3,
+      "confidence": "ALTA",
+      "why": "Canada: media 14.8; supera la línea en 100% de 5.",
+      "source": "ESPN",
+      "sample": 9,
+      "generated_at": "2026-09-23T15:41:23.643518+00:00"
     },
     {
       "league": "Amistosos",
@@ -129,7 +116,7 @@
       "why": "South Korea: media 14.2; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 8,
-      "generated_at": "2026-09-23T15:37:43.981101+00:00"
+      "generated_at": "2026-09-23T15:40:34.251055+00:00"
     },
     {
       "league": "Amistosos",
@@ -142,7 +129,7 @@
       "why": "United States: media 14.2; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 8,
-      "generated_at": "2026-09-23T15:38:03.195104+00:00"
+      "generated_at": "2026-09-23T15:40:43.701086+00:00"
     },
     {
       "league": "Amistosos",
@@ -155,7 +142,20 @@
       "why": "South Korea: media 14.2; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T15:38:33.547672+00:00"
+      "generated_at": "2026-09-23T15:40:58.784340+00:00"
+    },
+    {
+      "league": "Amistosos",
+      "match": "United States vs Chile",
+      "date": "29/09/2026",
+      "time": "19:00 COL",
+      "market": "United States más de 9.5 tiros",
+      "prob": 90.2,
+      "confidence": "ALTA",
+      "why": "United States: media 14.2; supera la línea en 100% de 4.",
+      "source": "ESPN",
+      "sample": 8,
+      "generated_at": "2026-09-23T15:41:04.284298+00:00"
     },
     {
       "league": "Amistosos",
@@ -168,7 +168,7 @@
       "why": "South Korea: media 14.2; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 8,
-      "generated_at": "2026-09-23T15:39:12.657809+00:00"
+      "generated_at": "2026-09-23T15:41:16.483301+00:00"
     },
     {
       "league": "Amistosos",
@@ -181,7 +181,7 @@
       "why": "United States: media 14.2; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T15:39:36.510080+00:00"
+      "generated_at": "2026-09-23T15:41:27.141338+00:00"
     },
     {
       "league": "Amistosos",
@@ -194,7 +194,7 @@
       "why": "Media reciente 3.67; supera 1.5 en 89% de la muestra.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T15:39:06.199843+00:00"
+      "generated_at": "2026-09-23T15:41:13.686624+00:00"
     },
     {
       "league": "Amistosos",
@@ -207,7 +207,7 @@
       "why": "Colombia: media 13.8; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T15:38:09.377764+00:00"
+      "generated_at": "2026-09-23T15:40:46.295999+00:00"
     },
     {
       "league": "Amistosos",
@@ -220,7 +220,7 @@
       "why": "Colombia: media 13.8; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T15:39:17.744129+00:00"
+      "generated_at": "2026-09-23T15:41:18.776451+00:00"
     },
     {
       "league": "Amistosos",
@@ -233,33 +233,7 @@
       "why": "Media reciente 3.43; supera 1.5 en 86% de la muestra.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T15:37:56.631000+00:00"
-    },
-    {
-      "league": "Amistosos",
-      "match": "China vs Maldives",
-      "date": "24/09/2026",
-      "time": "06:35 COL",
-      "market": "China más de 4.5 córners",
-      "prob": 84.9,
-      "confidence": "ALTA",
-      "why": "China: media 7.2; supera la línea en 75% de 4.",
-      "source": "ESPN",
-      "sample": 6,
-      "generated_at": "2026-09-23T15:37:45.615213+00:00"
-    },
-    {
-      "league": "Amistosos",
-      "match": "China vs New Zealand",
-      "date": "27/09/2026",
-      "time": "06:35 COL",
-      "market": "China más de 4.5 córners",
-      "prob": 84.9,
-      "confidence": "ALTA",
-      "why": "China: media 7.2; supera la línea en 75% de 4.",
-      "source": "ESPN",
-      "sample": 9,
-      "generated_at": "2026-09-23T15:38:17.355836+00:00"
+      "generated_at": "2026-09-23T15:40:40.841381+00:00"
     },
     {
       "league": "Amistosos",
@@ -272,7 +246,7 @@
       "why": "Media reciente 3.33; supera 1.5 en 100% de la muestra.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T15:39:27.058425+00:00"
+      "generated_at": "2026-09-23T15:41:22.613856+00:00"
     },
     {
       "league": "Amistosos",
@@ -285,20 +259,7 @@
       "why": "Histórico reciente: 5/6 supera 1.5.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T15:38:19.495893+00:00"
-    },
-    {
-      "league": "Amistosos",
-      "match": "Morocco vs Ghana",
-      "date": "04/10/2026",
-      "time": "14:00 COL",
-      "market": "Más de 1.5 goles",
-      "prob": 83.2,
-      "confidence": "ALTA",
-      "why": "Media reciente 3.22; supera 1.5 en 100% de la muestra.",
-      "source": "ESPN",
-      "sample": 9,
-      "generated_at": "2026-09-23T15:39:47.725107+00:00"
+      "generated_at": "2026-09-23T15:40:51.309851+00:00"
     },
     {
       "league": "Amistosos",
@@ -311,7 +272,46 @@
       "why": "Media reciente 3.17; supera 1.5 en 83% de la muestra.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T15:39:53.835636+00:00"
+      "generated_at": "2026-09-23T15:41:34.442526+00:00"
+    },
+    {
+      "league": "Amistosos",
+      "match": "China vs Maldives",
+      "date": "24/09/2026",
+      "time": "06:35 COL",
+      "market": "China más de 9.5 tiros",
+      "prob": 81.7,
+      "confidence": "ALTA",
+      "why": "China: media 12.8; supera la línea en 75% de 4.",
+      "source": "ESPN",
+      "sample": 6,
+      "generated_at": "2026-09-23T15:40:35.482973+00:00"
+    },
+    {
+      "league": "Amistosos",
+      "match": "China vs New Zealand",
+      "date": "27/09/2026",
+      "time": "06:35 COL",
+      "market": "China más de 9.5 tiros",
+      "prob": 81.7,
+      "confidence": "ALTA",
+      "why": "China: media 12.8; supera la línea en 75% de 4.",
+      "source": "ESPN",
+      "sample": 9,
+      "generated_at": "2026-09-23T15:40:50.360351+00:00"
+    },
+    {
+      "league": "Amistosos",
+      "match": "Morocco vs Ghana",
+      "date": "04/10/2026",
+      "time": "14:00 COL",
+      "market": "Morocco más de 9.5 tiros",
+      "prob": 81.7,
+      "confidence": "ALTA",
+      "why": "Morocco: media 12.8; supera la línea en 75% de 4.",
+      "source": "ESPN",
+      "sample": 9,
+      "generated_at": "2026-09-23T15:41:31.807561+00:00"
     },
     {
       "league": "Amistosos",
@@ -324,7 +324,7 @@
       "why": "Mexico: media 12.6; supera la línea en 80% de 5.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T15:38:49.147441+00:00"
+      "generated_at": "2026-09-23T15:41:05.276130+00:00"
     },
     {
       "league": "Amistosos",
@@ -337,7 +337,7 @@
       "why": "Media reciente 3.00; supera 1.5 en 89% de la muestra.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T15:38:57.090733+00:00"
+      "generated_at": "2026-09-23T15:41:09.700669+00:00"
     },
     {
       "league": "Amistosos",
@@ -350,7 +350,7 @@
       "why": "Media reciente 3.00; supera 1.5 en 83% de la muestra.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T15:39:02.593545+00:00"
+      "generated_at": "2026-09-23T15:41:12.196380+00:00"
     },
     {
       "league": "Amistosos",
@@ -363,7 +363,7 @@
       "why": "Histórico reciente: 7/9 supera 1.5.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T15:37:48.375367+00:00"
+      "generated_at": "2026-09-23T15:40:36.811522+00:00"
     },
     {
       "league": "Amistosos",
@@ -376,7 +376,7 @@
       "why": "Histórico reciente: 6/8 supera 1.5.",
       "source": "ESPN",
       "sample": 8,
-      "generated_at": "2026-09-23T15:38:24.795667+00:00"
+      "generated_at": "2026-09-23T15:40:54.162626+00:00"
     },
     {
       "league": "Amistosos",
@@ -389,7 +389,7 @@
       "why": "Histórico reciente: 5/7 supera 1.5.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T15:38:54.270285+00:00"
+      "generated_at": "2026-09-23T15:41:08.147270+00:00"
     },
     {
       "league": "Amistosos",
@@ -402,7 +402,7 @@
       "why": "Histórico reciente: 4/8 supera 1.5.",
       "source": "ESPN",
       "sample": 8,
-      "generated_at": "2026-09-23T15:39:44.743612+00:00"
+      "generated_at": "2026-09-23T15:41:30.675645+00:00"
     },
     {
       "league": "Amistosos",
@@ -415,7 +415,7 @@
       "why": "Histórico reciente: 3/7 supera 1.5.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T15:38:31.583513+00:00"
+      "generated_at": "2026-09-23T15:40:57.981717+00:00"
     },
     {
       "league": "Amistosos",
@@ -428,7 +428,7 @@
       "why": "Histórico reciente: 3/7 supera 1.5.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T15:39:41.124556+00:00"
+      "generated_at": "2026-09-23T15:41:29.320258+00:00"
     },
     {
       "league": "Amistosos",
@@ -441,7 +441,7 @@
       "why": "Histórico reciente: 2/6 supera 1.5.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T15:39:32.251794+00:00"
+      "generated_at": "2026-09-23T15:41:24.544780+00:00"
     }
   ],
   "reviewed": 160,
