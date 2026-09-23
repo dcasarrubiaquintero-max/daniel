@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T16:44:17.425392+00:00",
+  "updated_at": "2026-09-23T16:55:17.288179+00:00",
   "matches": [
     {
       "league": "Amistosos",
@@ -12,7 +12,7 @@
       "why": "Media reciente 5.80; supera 1.5 en 100% de la muestra.",
       "source": "ESPN",
       "sample": 5,
-      "generated_at": "2026-09-23T16:43:40.012162+00:00"
+      "generated_at": "2026-09-23T16:54:36.209666+00:00"
     },
     {
       "league": "Amistosos",
@@ -25,7 +25,7 @@
       "why": "Russia: media 17.2; supera la línea en 80% de 5.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T16:43:58.499003+00:00"
+      "generated_at": "2026-09-23T16:54:55.257620+00:00"
     },
     {
       "league": "Amistosos",
@@ -38,7 +38,7 @@
       "why": "Statz: 97% de acierto en 37 partidos.",
       "source": "Statz",
       "sample": 8,
-      "generated_at": "2026-09-23T16:43:07.464939+00:00"
+      "generated_at": "2026-09-23T16:54:05.020000+00:00"
     },
     {
       "league": "Amistosos",
@@ -51,7 +51,7 @@
       "why": "Media reciente 4.71; supera 1.5 en 86% de la muestra.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T16:42:38.795830+00:00"
+      "generated_at": "2026-09-23T16:53:55.533930+00:00"
     },
     {
       "league": "Amistosos",
@@ -64,7 +64,7 @@
       "why": "Brazil: media 15.5; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 8,
-      "generated_at": "2026-09-23T16:43:35.324325+00:00"
+      "generated_at": "2026-09-23T16:54:30.629743+00:00"
     },
     {
       "league": "Amistosos",
@@ -77,7 +77,7 @@
       "why": "Brazil: media 15.5; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T16:43:56.489592+00:00"
+      "generated_at": "2026-09-23T16:54:54.018959+00:00"
     },
     {
       "league": "Amistosos",
@@ -90,7 +90,7 @@
       "why": "Statz: 94% de acierto en 35 partidos.",
       "source": "Statz",
       "sample": 9,
-      "generated_at": "2026-09-23T16:43:36.751552+00:00"
+      "generated_at": "2026-09-23T16:54:32.656237+00:00"
     },
     {
       "league": "Amistosos",
@@ -103,7 +103,7 @@
       "why": "Statz: 93% de acierto en 46 partidos.",
       "source": "Statz",
       "sample": 8,
-      "generated_at": "2026-09-23T16:42:41.985759+00:00"
+      "generated_at": "2026-09-23T16:53:59.447392+00:00"
     },
     {
       "league": "Amistosos",
@@ -116,7 +116,7 @@
       "why": "Canada: media 14.8; supera la línea en 100% de 5.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T16:44:02.259039+00:00"
+      "generated_at": "2026-09-23T16:54:57.842649+00:00"
     },
     {
       "league": "Amistosos",
@@ -129,7 +129,7 @@
       "why": "Statz: 92% de acierto en 48 partidos.",
       "source": "Statz",
       "sample": 8,
-      "generated_at": "2026-09-23T16:43:14.371817+00:00"
+      "generated_at": "2026-09-23T16:54:09.935496+00:00"
     },
     {
       "league": "Amistosos",
@@ -142,7 +142,7 @@
       "why": "Media reciente 4.00; supera 1.5 en 100% de la muestra.",
       "source": "ESPN",
       "sample": 5,
-      "generated_at": "2026-09-23T16:43:25.045895+00:00"
+      "generated_at": "2026-09-23T16:54:19.952773+00:00"
     },
     {
       "league": "Amistosos",
@@ -155,7 +155,7 @@
       "why": "South Korea: media 14.2; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T16:43:31.191807+00:00"
+      "generated_at": "2026-09-23T16:54:26.670023+00:00"
     },
     {
       "league": "Amistosos",
@@ -168,7 +168,7 @@
       "why": "United States: media 14.2; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 8,
-      "generated_at": "2026-09-23T16:43:38.149876+00:00"
+      "generated_at": "2026-09-23T16:54:34.075138+00:00"
     },
     {
       "league": "Amistosos",
@@ -181,7 +181,7 @@
       "why": "South Korea: media 14.2; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 8,
-      "generated_at": "2026-09-23T16:43:50.887494+00:00"
+      "generated_at": "2026-09-23T16:54:48.563931+00:00"
     },
     {
       "league": "Amistosos",
@@ -194,7 +194,7 @@
       "why": "United States: media 14.2; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T16:44:06.781833+00:00"
+      "generated_at": "2026-09-23T16:55:01.826612+00:00"
     },
     {
       "league": "Amistosos",
@@ -207,7 +207,7 @@
       "why": "Media reciente 3.67; supera 1.5 en 89% de la muestra.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T16:43:47.839278+00:00"
+      "generated_at": "2026-09-23T16:54:45.136395+00:00"
     },
     {
       "league": "Amistosos",
@@ -220,7 +220,7 @@
       "why": "Colombia: media 13.8; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T16:43:18.487883+00:00"
+      "generated_at": "2026-09-23T16:54:12.968175+00:00"
     },
     {
       "league": "Amistosos",
@@ -233,7 +233,7 @@
       "why": "Colombia: media 13.8; supera la línea en 100% de 4.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T16:43:53.822474+00:00"
+      "generated_at": "2026-09-23T16:54:51.344450+00:00"
     },
     {
       "league": "Amistosos",
@@ -246,7 +246,7 @@
       "why": "Media reciente 3.50; supera 1.5 en 100% de la muestra.",
       "source": "ESPN",
       "sample": 4,
-      "generated_at": "2026-09-23T16:41:24.789228+00:00"
+      "generated_at": "2026-09-23T16:52:50.951028+00:00"
     },
     {
       "league": "Amistosos",
@@ -259,7 +259,7 @@
       "why": "Statz: 86% de acierto en 36 partidos.",
       "source": "Statz",
       "sample": 9,
-      "generated_at": "2026-09-23T16:43:16.275666+00:00"
+      "generated_at": "2026-09-23T16:54:11.470502+00:00"
     },
     {
       "league": "Amistosos",
@@ -272,7 +272,7 @@
       "why": "Media reciente 3.43; supera 1.5 en 86% de la muestra.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T16:43:08.687625+00:00"
+      "generated_at": "2026-09-23T16:54:06.172638+00:00"
     },
     {
       "league": "Amistosos",
@@ -285,7 +285,7 @@
       "why": "Media reciente 3.33; supera 1.5 en 100% de la muestra.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T16:44:00.437898+00:00"
+      "generated_at": "2026-09-23T16:54:56.481621+00:00"
     },
     {
       "league": "Amistosos",
@@ -298,7 +298,7 @@
       "why": "Media reciente 3.25; supera 1.5 en 75% de la muestra.",
       "source": "ESPN",
       "sample": 4,
-      "generated_at": "2026-09-23T16:43:21.564334+00:00"
+      "generated_at": "2026-09-23T16:54:15.972241+00:00"
     },
     {
       "league": "Amistosos",
@@ -311,7 +311,7 @@
       "why": "Histórico reciente: 5/6 supera 1.5.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T16:43:24.416253+00:00"
+      "generated_at": "2026-09-23T16:54:18.825979+00:00"
     },
     {
       "league": "Amistosos",
@@ -324,7 +324,7 @@
       "why": "Media reciente 3.17; supera 1.5 en 83% de la muestra.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T16:44:16.332859+00:00"
+      "generated_at": "2026-09-23T16:55:15.636190+00:00"
     },
     {
       "league": "Amistosos",
@@ -337,7 +337,7 @@
       "why": "China: media 12.8; supera la línea en 75% de 4.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T16:42:42.756776+00:00"
+      "generated_at": "2026-09-23T16:54:00.211668+00:00"
     },
     {
       "league": "Amistosos",
@@ -350,7 +350,7 @@
       "why": "China: media 12.8; supera la línea en 75% de 4.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T16:43:23.342570+00:00"
+      "generated_at": "2026-09-23T16:54:17.411813+00:00"
     },
     {
       "league": "Amistosos",
@@ -363,7 +363,7 @@
       "why": "China: media 12.8; supera la línea en 75% de 4.",
       "source": "ESPN",
       "sample": 5,
-      "generated_at": "2026-09-23T16:43:51.653599+00:00"
+      "generated_at": "2026-09-23T16:54:49.441933+00:00"
     },
     {
       "league": "Amistosos",
@@ -376,7 +376,7 @@
       "why": "Morocco: media 12.8; supera la línea en 75% de 4.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T16:44:13.160987+00:00"
+      "generated_at": "2026-09-23T16:55:12.506183+00:00"
     },
     {
       "league": "Amistosos",
@@ -389,7 +389,7 @@
       "why": "Mexico: media 12.6; supera la línea en 80% de 5.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T16:43:39.193623+00:00"
+      "generated_at": "2026-09-23T16:54:35.487469+00:00"
     },
     {
       "league": "Amistosos",
@@ -402,7 +402,7 @@
       "why": "Media reciente 3.00; supera 1.5 en 75% de la muestra.",
       "source": "ESPN",
       "sample": 4,
-      "generated_at": "2026-09-23T16:43:40.494537+00:00"
+      "generated_at": "2026-09-23T16:54:37.049213+00:00"
     },
     {
       "league": "Amistosos",
@@ -415,7 +415,7 @@
       "why": "Media reciente 3.00; supera 1.5 en 89% de la muestra.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T16:43:42.999507+00:00"
+      "generated_at": "2026-09-23T16:54:40.468670+00:00"
     },
     {
       "league": "Amistosos",
@@ -428,7 +428,7 @@
       "why": "Media reciente 3.00; supera 1.5 en 83% de la muestra.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T16:43:46.202146+00:00"
+      "generated_at": "2026-09-23T16:54:43.227392+00:00"
     },
     {
       "league": "Amistosos",
@@ -441,7 +441,7 @@
       "why": "Histórico reciente: 7/9 supera 1.5.",
       "source": "ESPN",
       "sample": 9,
-      "generated_at": "2026-09-23T16:42:44.065114+00:00"
+      "generated_at": "2026-09-23T16:54:01.668234+00:00"
     },
     {
       "league": "Amistosos",
@@ -454,7 +454,7 @@
       "why": "Histórico reciente: 3/4 supera 1.5.",
       "source": "ESPN",
       "sample": 4,
-      "generated_at": "2026-09-23T16:43:20.774661+00:00"
+      "generated_at": "2026-09-23T16:54:15.397677+00:00"
     },
     {
       "league": "Amistosos",
@@ -467,7 +467,7 @@
       "why": "Histórico reciente: 6/8 supera 1.5.",
       "source": "ESPN",
       "sample": 8,
-      "generated_at": "2026-09-23T16:43:26.250273+00:00"
+      "generated_at": "2026-09-23T16:54:21.166630+00:00"
     },
     {
       "league": "Amistosos",
@@ -480,7 +480,7 @@
       "why": "Histórico reciente: 5/7 supera 1.5.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T16:43:41.785126+00:00"
+      "generated_at": "2026-09-23T16:54:39.313206+00:00"
     },
     {
       "league": "Amistosos",
@@ -493,7 +493,7 @@
       "why": "Histórico reciente: 2/3 supera 1.5.",
       "source": "ESPN",
       "sample": 3,
-      "generated_at": "2026-09-23T16:43:52.390704+00:00"
+      "generated_at": "2026-09-23T16:54:50.340723+00:00"
     },
     {
       "league": "Amistosos",
@@ -506,7 +506,7 @@
       "why": "Histórico reciente: 2/3 supera 1.5.",
       "source": "ESPN",
       "sample": 3,
-      "generated_at": "2026-09-23T16:44:15.559187+00:00"
+      "generated_at": "2026-09-23T16:55:14.666385+00:00"
     },
     {
       "league": "Amistosos",
@@ -519,7 +519,7 @@
       "why": "Histórico reciente: 3/5 supera 1.5.",
       "source": "ESPN",
       "sample": 5,
-      "generated_at": "2026-09-23T16:42:39.974362+00:00"
+      "generated_at": "2026-09-23T16:53:56.861665+00:00"
     },
     {
       "league": "Amistosos",
@@ -532,7 +532,7 @@
       "why": "Histórico reciente: 3/5 supera 1.5.",
       "source": "ESPN",
       "sample": 5,
-      "generated_at": "2026-09-23T16:44:05.180792+00:00"
+      "generated_at": "2026-09-23T16:54:59.615887+00:00"
     },
     {
       "league": "Amistosos",
@@ -545,7 +545,7 @@
       "why": "Histórico reciente: 2/4 supera 1.5.",
       "source": "ESPN",
       "sample": 4,
-      "generated_at": "2026-09-23T16:43:26.954583+00:00"
+      "generated_at": "2026-09-23T16:54:21.598144+00:00"
     },
     {
       "league": "Amistosos",
@@ -558,7 +558,7 @@
       "why": "Histórico reciente: 4/8 supera 1.5.",
       "source": "ESPN",
       "sample": 8,
-      "generated_at": "2026-09-23T16:44:11.917077+00:00"
+      "generated_at": "2026-09-23T16:55:11.378933+00:00"
     },
     {
       "league": "Amistosos",
@@ -571,7 +571,7 @@
       "why": "Histórico reciente: 3/7 supera 1.5.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T16:43:30.134623+00:00"
+      "generated_at": "2026-09-23T16:54:24.810456+00:00"
     },
     {
       "league": "Amistosos",
@@ -584,7 +584,7 @@
       "why": "Histórico reciente: 3/7 supera 1.5.",
       "source": "ESPN",
       "sample": 7,
-      "generated_at": "2026-09-23T16:44:09.618636+00:00"
+      "generated_at": "2026-09-23T16:55:04.584501+00:00"
     },
     {
       "league": "Amistosos",
@@ -597,7 +597,7 @@
       "why": "Histórico reciente: 2/6 supera 1.5.",
       "source": "ESPN",
       "sample": 6,
-      "generated_at": "2026-09-23T16:44:03.753406+00:00"
+      "generated_at": "2026-09-23T16:54:58.837913+00:00"
     },
     {
       "league": "Amistosos",
@@ -610,7 +610,7 @@
       "why": "Histórico reciente: 1/3 supera 1.5.",
       "source": "ESPN",
       "sample": 3,
-      "generated_at": "2026-09-23T16:44:10.248924+00:00"
+      "generated_at": "2026-09-23T16:55:10.114993+00:00"
     },
     {
       "league": "Amistosos",
@@ -623,7 +623,7 @@
       "why": "Histórico reciente: 1/5 supera 1.5.",
       "source": "ESPN",
       "sample": 5,
-      "generated_at": "2026-09-23T16:42:40.876908+00:00"
+      "generated_at": "2026-09-23T16:53:57.967653+00:00"
     },
     {
       "league": "Amistosos",
@@ -636,7 +636,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 2,
-      "generated_at": "2026-09-23T16:41:31.588503+00:00"
+      "generated_at": "2026-09-23T16:52:58.460599+00:00"
     },
     {
       "league": "Nations League",
@@ -649,7 +649,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:41:42.039311+00:00"
+      "generated_at": "2026-09-23T16:53:06.863643+00:00"
     },
     {
       "league": "Nations League",
@@ -662,7 +662,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:41:53.072659+00:00"
+      "generated_at": "2026-09-23T16:53:17.350779+00:00"
     },
     {
       "league": "Nations League",
@@ -675,7 +675,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:42:03.945875+00:00"
+      "generated_at": "2026-09-23T16:53:28.520524+00:00"
     },
     {
       "league": "Nations League",
@@ -688,7 +688,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:42:14.282358+00:00"
+      "generated_at": "2026-09-23T16:53:40.762179+00:00"
     },
     {
       "league": "Nations League",
@@ -701,7 +701,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:42:25.983120+00:00"
+      "generated_at": "2026-09-23T16:53:45.778335+00:00"
     },
     {
       "league": "Nations League",
@@ -714,7 +714,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:42:37.492269+00:00"
+      "generated_at": "2026-09-23T16:53:53.845091+00:00"
     },
     {
       "league": "Nations League",
@@ -727,7 +727,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:42:37.620999+00:00"
+      "generated_at": "2026-09-23T16:53:54.161930+00:00"
     },
     {
       "league": "Nations League",
@@ -740,7 +740,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:42:37.793965+00:00"
+      "generated_at": "2026-09-23T16:53:54.378722+00:00"
     },
     {
       "league": "Amistosos",
@@ -753,7 +753,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 2,
-      "generated_at": "2026-09-23T16:42:39.255615+00:00"
+      "generated_at": "2026-09-23T16:53:55.949000+00:00"
     },
     {
       "league": "Nations League",
@@ -766,7 +766,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:42:44.596679+00:00"
+      "generated_at": "2026-09-23T16:54:01.994273+00:00"
     },
     {
       "league": "Nations League",
@@ -779,7 +779,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:42:44.762401+00:00"
+      "generated_at": "2026-09-23T16:54:02.366837+00:00"
     },
     {
       "league": "Nations League",
@@ -792,7 +792,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:42:44.947106+00:00"
+      "generated_at": "2026-09-23T16:54:02.565259+00:00"
     },
     {
       "league": "Nations League",
@@ -805,7 +805,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:42:45.151623+00:00"
+      "generated_at": "2026-09-23T16:54:02.778171+00:00"
     },
     {
       "league": "Nations League",
@@ -818,7 +818,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:05.273558+00:00"
+      "generated_at": "2026-09-23T16:54:03.166447+00:00"
     },
     {
       "league": "Nations League",
@@ -831,7 +831,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:05.642335+00:00"
+      "generated_at": "2026-09-23T16:54:03.524537+00:00"
     },
     {
       "league": "Nations League",
@@ -844,7 +844,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:05.809929+00:00"
+      "generated_at": "2026-09-23T16:54:03.643822+00:00"
     },
     {
       "league": "Nations League",
@@ -857,7 +857,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:05.959255+00:00"
+      "generated_at": "2026-09-23T16:54:03.837130+00:00"
     },
     {
       "league": "Nations League",
@@ -870,7 +870,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:08.915756+00:00"
+      "generated_at": "2026-09-23T16:54:06.310660+00:00"
     },
     {
       "league": "Nations League",
@@ -883,7 +883,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:09.239405+00:00"
+      "generated_at": "2026-09-23T16:54:06.559732+00:00"
     },
     {
       "league": "Nations League",
@@ -896,7 +896,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:09.413959+00:00"
+      "generated_at": "2026-09-23T16:54:06.743533+00:00"
     },
     {
       "league": "Nations League",
@@ -909,7 +909,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:09.607633+00:00"
+      "generated_at": "2026-09-23T16:54:06.877250+00:00"
     },
     {
       "league": "Nations League",
@@ -922,7 +922,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:09.830515+00:00"
+      "generated_at": "2026-09-23T16:54:07.505366+00:00"
     },
     {
       "league": "Nations League",
@@ -935,7 +935,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:09.979002+00:00"
+      "generated_at": "2026-09-23T16:54:07.711636+00:00"
     },
     {
       "league": "Nations League",
@@ -948,7 +948,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:11.492532+00:00"
+      "generated_at": "2026-09-23T16:54:07.894156+00:00"
     },
     {
       "league": "Nations League",
@@ -961,7 +961,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:12.579106+00:00"
+      "generated_at": "2026-09-23T16:54:08.245237+00:00"
     },
     {
       "league": "Nations League",
@@ -974,7 +974,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:12.800998+00:00"
+      "generated_at": "2026-09-23T16:54:08.602653+00:00"
     },
     {
       "league": "Nations League",
@@ -987,7 +987,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:13.017955+00:00"
+      "generated_at": "2026-09-23T16:54:08.793985+00:00"
     },
     {
       "league": "Nations League",
@@ -1000,7 +1000,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:18.648532+00:00"
+      "generated_at": "2026-09-23T16:54:13.289621+00:00"
     },
     {
       "league": "Nations League",
@@ -1013,7 +1013,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:18.880652+00:00"
+      "generated_at": "2026-09-23T16:54:13.415279+00:00"
     },
     {
       "league": "Nations League",
@@ -1026,7 +1026,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:19.067759+00:00"
+      "generated_at": "2026-09-23T16:54:13.637671+00:00"
     },
     {
       "league": "Nations League",
@@ -1039,7 +1039,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:19.259267+00:00"
+      "generated_at": "2026-09-23T16:54:13.965622+00:00"
     },
     {
       "league": "Nations League",
@@ -1052,7 +1052,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:19.525691+00:00"
+      "generated_at": "2026-09-23T16:54:14.133303+00:00"
     },
     {
       "league": "Nations League",
@@ -1065,7 +1065,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:19.693872+00:00"
+      "generated_at": "2026-09-23T16:54:14.452783+00:00"
     },
     {
       "league": "Nations League",
@@ -1078,7 +1078,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:19.953841+00:00"
+      "generated_at": "2026-09-23T16:54:14.571994+00:00"
     },
     {
       "league": "Nations League",
@@ -1091,7 +1091,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:20.126232+00:00"
+      "generated_at": "2026-09-23T16:54:14.753841+00:00"
     },
     {
       "league": "Amistosos",
@@ -1104,7 +1104,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:23.473121+00:00"
+      "generated_at": "2026-09-23T16:54:17.672621+00:00"
     },
     {
       "league": "Nations League",
@@ -1117,7 +1117,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:27.203476+00:00"
+      "generated_at": "2026-09-23T16:54:21.782378+00:00"
     },
     {
       "league": "Nations League",
@@ -1130,7 +1130,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:27.608616+00:00"
+      "generated_at": "2026-09-23T16:54:21.978103+00:00"
     },
     {
       "league": "Nations League",
@@ -1143,7 +1143,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:27.731949+00:00"
+      "generated_at": "2026-09-23T16:54:22.128436+00:00"
     },
     {
       "league": "Nations League",
@@ -1156,7 +1156,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:27.871178+00:00"
+      "generated_at": "2026-09-23T16:54:22.389676+00:00"
     },
     {
       "league": "Nations League",
@@ -1169,7 +1169,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:28.033994+00:00"
+      "generated_at": "2026-09-23T16:54:22.570082+00:00"
     },
     {
       "league": "Nations League",
@@ -1182,7 +1182,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:28.269002+00:00"
+      "generated_at": "2026-09-23T16:54:22.815711+00:00"
     },
     {
       "league": "Nations League",
@@ -1195,7 +1195,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:28.406958+00:00"
+      "generated_at": "2026-09-23T16:54:23.168155+00:00"
     },
     {
       "league": "Nations League",
@@ -1208,7 +1208,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:28.544353+00:00"
+      "generated_at": "2026-09-23T16:54:23.344433+00:00"
     },
     {
       "league": "Amistosos",
@@ -1221,7 +1221,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 1,
-      "generated_at": "2026-09-23T16:43:28.888097+00:00"
+      "generated_at": "2026-09-23T16:54:23.743921+00:00"
     },
     {
       "league": "Amistosos",
@@ -1234,7 +1234,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 1,
-      "generated_at": "2026-09-23T16:43:31.378431+00:00"
+      "generated_at": "2026-09-23T16:54:26.981162+00:00"
     },
     {
       "league": "Nations League",
@@ -1247,7 +1247,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:31.543129+00:00"
+      "generated_at": "2026-09-23T16:54:27.109623+00:00"
     },
     {
       "league": "Nations League",
@@ -1260,7 +1260,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:31.825869+00:00"
+      "generated_at": "2026-09-23T16:54:27.374635+00:00"
     },
     {
       "league": "Nations League",
@@ -1273,7 +1273,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:32.155236+00:00"
+      "generated_at": "2026-09-23T16:54:27.485543+00:00"
     },
     {
       "league": "Nations League",
@@ -1286,7 +1286,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:32.395881+00:00"
+      "generated_at": "2026-09-23T16:54:27.761404+00:00"
     },
     {
       "league": "Nations League",
@@ -1299,7 +1299,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:32.712324+00:00"
+      "generated_at": "2026-09-23T16:54:27.881235+00:00"
     },
     {
       "league": "Nations League",
@@ -1312,7 +1312,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:32.868912+00:00"
+      "generated_at": "2026-09-23T16:54:28.085055+00:00"
     },
     {
       "league": "Nations League",
@@ -1325,7 +1325,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:33.020356+00:00"
+      "generated_at": "2026-09-23T16:54:28.349427+00:00"
     },
     {
       "league": "Nations League",
@@ -1338,7 +1338,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:33.417593+00:00"
+      "generated_at": "2026-09-23T16:54:28.640732+00:00"
     },
     {
       "league": "Nations League",
@@ -1351,7 +1351,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:33.567721+00:00"
+      "generated_at": "2026-09-23T16:54:28.762581+00:00"
     },
     {
       "league": "Nations League",
@@ -1364,7 +1364,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:34.071693+00:00"
+      "generated_at": "2026-09-23T16:54:28.895864+00:00"
     },
     {
       "league": "Amistosos",
@@ -1377,7 +1377,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:40.620034+00:00"
+      "generated_at": "2026-09-23T16:54:37.272923+00:00"
     },
     {
       "league": "Amistosos",
@@ -1390,7 +1390,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 2,
-      "generated_at": "2026-09-23T16:43:41.076091+00:00"
+      "generated_at": "2026-09-23T16:54:37.791428+00:00"
     },
     {
       "league": "Amistosos",
@@ -1403,7 +1403,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:43.198802+00:00"
+      "generated_at": "2026-09-23T16:54:40.610062+00:00"
     },
     {
       "league": "Nations League",
@@ -1416,7 +1416,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:43.463388+00:00"
+      "generated_at": "2026-09-23T16:54:40.796788+00:00"
     },
     {
       "league": "Nations League",
@@ -1429,7 +1429,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:43.612631+00:00"
+      "generated_at": "2026-09-23T16:54:41.103148+00:00"
     },
     {
       "league": "Nations League",
@@ -1442,7 +1442,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:43.919665+00:00"
+      "generated_at": "2026-09-23T16:54:41.324363+00:00"
     },
     {
       "league": "Nations League",
@@ -1455,7 +1455,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:44.177642+00:00"
+      "generated_at": "2026-09-23T16:54:41.519068+00:00"
     },
     {
       "league": "Nations League",
@@ -1468,7 +1468,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:44.306754+00:00"
+      "generated_at": "2026-09-23T16:54:41.682396+00:00"
     },
     {
       "league": "Nations League",
@@ -1481,7 +1481,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:44.687918+00:00"
+      "generated_at": "2026-09-23T16:54:41.918282+00:00"
     },
     {
       "league": "Nations League",
@@ -1494,7 +1494,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:44.890881+00:00"
+      "generated_at": "2026-09-23T16:54:42.102679+00:00"
     },
     {
       "league": "Nations League",
@@ -1507,7 +1507,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:45.065666+00:00"
+      "generated_at": "2026-09-23T16:54:42.231061+00:00"
     },
     {
       "league": "Amistosos",
@@ -1520,7 +1520,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 1,
-      "generated_at": "2026-09-23T16:43:46.508385+00:00"
+      "generated_at": "2026-09-23T16:54:43.460155+00:00"
     },
     {
       "league": "Nations League",
@@ -1533,7 +1533,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:47.950271+00:00"
+      "generated_at": "2026-09-23T16:54:45.396070+00:00"
     },
     {
       "league": "Nations League",
@@ -1546,7 +1546,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:48.084909+00:00"
+      "generated_at": "2026-09-23T16:54:45.634812+00:00"
     },
     {
       "league": "Nations League",
@@ -1559,7 +1559,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:48.326624+00:00"
+      "generated_at": "2026-09-23T16:54:45.839280+00:00"
     },
     {
       "league": "Nations League",
@@ -1572,7 +1572,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:48.445707+00:00"
+      "generated_at": "2026-09-23T16:54:45.963119+00:00"
     },
     {
       "league": "Nations League",
@@ -1585,7 +1585,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:48.647845+00:00"
+      "generated_at": "2026-09-23T16:54:46.111584+00:00"
     },
     {
       "league": "Nations League",
@@ -1598,7 +1598,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:48.833067+00:00"
+      "generated_at": "2026-09-23T16:54:46.358824+00:00"
     },
     {
       "league": "Nations League",
@@ -1611,7 +1611,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:48.973184+00:00"
+      "generated_at": "2026-09-23T16:54:46.651294+00:00"
     },
     {
       "league": "Nations League",
@@ -1624,7 +1624,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:49.201095+00:00"
+      "generated_at": "2026-09-23T16:54:46.779462+00:00"
     },
     {
       "league": "Nations League",
@@ -1637,7 +1637,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:49.326518+00:00"
+      "generated_at": "2026-09-23T16:54:46.903695+00:00"
     },
     {
       "league": "Nations League",
@@ -1650,7 +1650,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:49.505253+00:00"
+      "generated_at": "2026-09-23T16:54:47.190857+00:00"
     },
     {
       "league": "Amistosos",
@@ -1663,7 +1663,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:51.929196+00:00"
+      "generated_at": "2026-09-23T16:54:49.843577+00:00"
     },
     {
       "league": "Nations League",
@@ -1676,7 +1676,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:54.025157+00:00"
+      "generated_at": "2026-09-23T16:54:51.567901+00:00"
     },
     {
       "league": "Nations League",
@@ -1689,7 +1689,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:54.208574+00:00"
+      "generated_at": "2026-09-23T16:54:51.776120+00:00"
     },
     {
       "league": "Nations League",
@@ -1702,7 +1702,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:54.402211+00:00"
+      "generated_at": "2026-09-23T16:54:51.939214+00:00"
     },
     {
       "league": "Nations League",
@@ -1715,7 +1715,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:54.558172+00:00"
+      "generated_at": "2026-09-23T16:54:52.126700+00:00"
     },
     {
       "league": "Nations League",
@@ -1728,7 +1728,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:54.739010+00:00"
+      "generated_at": "2026-09-23T16:54:52.328582+00:00"
     },
     {
       "league": "Nations League",
@@ -1741,7 +1741,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:55.036915+00:00"
+      "generated_at": "2026-09-23T16:54:52.465661+00:00"
     },
     {
       "league": "Nations League",
@@ -1754,7 +1754,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:55.322197+00:00"
+      "generated_at": "2026-09-23T16:54:52.652261+00:00"
     },
     {
       "league": "Nations League",
@@ -1767,7 +1767,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:43:55.502783+00:00"
+      "generated_at": "2026-09-23T16:54:52.829200+00:00"
     },
     {
       "league": "Amistosos",
@@ -1780,7 +1780,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:02.623944+00:00"
+      "generated_at": "2026-09-23T16:54:57.995838+00:00"
     },
     {
       "league": "Nations League",
@@ -1793,7 +1793,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:06.912564+00:00"
+      "generated_at": "2026-09-23T16:55:02.101122+00:00"
     },
     {
       "league": "Nations League",
@@ -1806,7 +1806,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:07.115569+00:00"
+      "generated_at": "2026-09-23T16:55:02.397156+00:00"
     },
     {
       "league": "Nations League",
@@ -1819,7 +1819,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:07.426505+00:00"
+      "generated_at": "2026-09-23T16:55:02.558245+00:00"
     },
     {
       "league": "Nations League",
@@ -1832,7 +1832,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:07.666240+00:00"
+      "generated_at": "2026-09-23T16:55:02.769412+00:00"
     },
     {
       "league": "Nations League",
@@ -1845,7 +1845,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:07.892206+00:00"
+      "generated_at": "2026-09-23T16:55:03.041195+00:00"
     },
     {
       "league": "Nations League",
@@ -1858,7 +1858,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:08.083054+00:00"
+      "generated_at": "2026-09-23T16:55:03.216166+00:00"
     },
     {
       "league": "Nations League",
@@ -1871,7 +1871,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:08.321287+00:00"
+      "generated_at": "2026-09-23T16:55:03.405306+00:00"
     },
     {
       "league": "Nations League",
@@ -1884,7 +1884,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:08.659744+00:00"
+      "generated_at": "2026-09-23T16:55:03.603153+00:00"
     },
     {
       "league": "Nations League",
@@ -1897,7 +1897,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:13.339789+00:00"
+      "generated_at": "2026-09-23T16:55:12.651354+00:00"
     },
     {
       "league": "Nations League",
@@ -1910,7 +1910,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:13.561597+00:00"
+      "generated_at": "2026-09-23T16:55:12.910564+00:00"
     },
     {
       "league": "Nations League",
@@ -1923,7 +1923,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:13.844408+00:00"
+      "generated_at": "2026-09-23T16:55:13.041247+00:00"
     },
     {
       "league": "Nations League",
@@ -1936,7 +1936,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:14.035758+00:00"
+      "generated_at": "2026-09-23T16:55:13.252796+00:00"
     },
     {
       "league": "Nations League",
@@ -1949,7 +1949,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:14.301537+00:00"
+      "generated_at": "2026-09-23T16:55:13.514411+00:00"
     },
     {
       "league": "Nations League",
@@ -1962,7 +1962,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:14.454529+00:00"
+      "generated_at": "2026-09-23T16:55:13.654895+00:00"
     },
     {
       "league": "Nations League",
@@ -1975,7 +1975,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:14.623055+00:00"
+      "generated_at": "2026-09-23T16:55:13.839746+00:00"
     },
     {
       "league": "Nations League",
@@ -1988,7 +1988,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:14.873130+00:00"
+      "generated_at": "2026-09-23T16:55:14.033022+00:00"
     },
     {
       "league": "Amistosos",
@@ -2001,7 +2001,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:15.090595+00:00"
+      "generated_at": "2026-09-23T16:55:14.175606+00:00"
     },
     {
       "league": "Nations League",
@@ -2014,7 +2014,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:16.555108+00:00"
+      "generated_at": "2026-09-23T16:55:15.871676+00:00"
     },
     {
       "league": "Nations League",
@@ -2027,7 +2027,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:16.677362+00:00"
+      "generated_at": "2026-09-23T16:55:16.090097+00:00"
     },
     {
       "league": "Nations League",
@@ -2040,7 +2040,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:16.836275+00:00"
+      "generated_at": "2026-09-23T16:55:16.538603+00:00"
     },
     {
       "league": "Nations League",
@@ -2053,7 +2053,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:17.066831+00:00"
+      "generated_at": "2026-09-23T16:55:16.918559+00:00"
     },
     {
       "league": "Nations League",
@@ -2066,7 +2066,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:17.242074+00:00"
+      "generated_at": "2026-09-23T16:55:17.116637+00:00"
     },
     {
       "league": "Nations League",
@@ -2079,7 +2079,7 @@
       "why": "No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
       "source": "Radar",
       "sample": 0,
-      "generated_at": "2026-09-23T16:44:17.425265+00:00"
+      "generated_at": "2026-09-23T16:55:17.288037+00:00"
     }
   ],
   "reviewed": 160,
