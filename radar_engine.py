@@ -270,7 +270,10 @@ def upcoming(league,date):
                     "date":dt.date().isoformat(),"time":dt.strftime("%H:%M UTC")})
     return out
 
-def enrich_player_signal_365(match):\n    # Hook reservado para señales de jugador; requiere una respuesta 365Scores válida.\n    if scores365_player_stats is None or not match.get("id"): return []\n    try:\n        data = scores365_player_stats(match["id"])\n    except Exception:\n        return []\n    return data.get("teams", [])\n\ndef main():
+def enrich_player_signal_365(match):
+    # 365Scores IDs are not assumed to equal ESPN IDs. Mapping is added later.
+    return []
+\ndef main():
     now=datetime.now(timezone.utc)
     matches=[];seen=set()
     for i in range(10):
@@ -282,12 +285,12 @@ def enrich_player_signal_365(match):\n    # Hook reservado para señales de juga
     for m in matches[:120]:
         reviewed+=1
         a=team_rows(m["league"],m["home_id"]);b=team_rows(m["league"],m["away_id"])
-        s=signal(m,a,b)\n        # 365Scores queda conectado como segunda capa de datos de jugador;\n        # si no responde con estructura válida, el motor conserva el fallback ESPN.\n        enrich_player_signal_365(m)
+        s=signal(m,a,b)
         if s:signals.append(s)
     signals.sort(key=lambda x: x["prob"], reverse=True)
     out={"updated_at":datetime.now(timezone.utc).isoformat(),"matches":signals,"reviewed":reviewed,
          "markets":15,"competitions":len(set(m["league"] for m in matches)),
-         "source":"ESPN public soccer data + EdgeBet statistical model; 365Scores integration pending a stable authorized data endpoint.",
+         "source":"ESPN public soccer data + EdgeBet statistical model; 365Scores player layer prepared, match-ID mapping pending.",
          "model":"Recent-match rate + hit-rate screen; match totals aggregate both teams; strongest market only."}
     os.makedirs("data",exist_ok=True)
     with open("data/radar.json","w",encoding="utf-8") as f:json.dump(out,f,ensure_ascii=False,indent=2)
