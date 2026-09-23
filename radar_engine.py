@@ -40,22 +40,25 @@ def stat_value(stats,name):
     return None
 
 def extract_player_rows(summary_data, team_name):
-    """Best-effort parser for ESPN soccer boxscore player statistics."""
+    """Normalize ESPN player boxscore rows when labels are exposed."""
     out=[]
-    players=(summary_data.get("boxscore",{}) or {}).get("players",[]) or []
+    players=summary_data.get("boxscore",{}).get("players",[]) or []
     def walk(node):
         if isinstance(node,dict):
-            athlete=node.get("athlete")
-            stats=node.get("statistics")
-            if athlete and isinstance(stats,list):
-                name=athlete.get("displayName")
-                flat=[]
-                for block in stats:
-                    if isinstance(block,dict):
-                        vals=block.get("stats") or block.get("statistics") or block.get("values")
-                        if isinstance(vals,list): flat.extend(vals)
-                    elif isinstance(block,(int,float,str)): flat.append(block)
-                if name and flat: out.append((name,flat))
+            athlete=node.get("athlete") or {}
+            name=athlete.get("displayName")
+            blocks=node.get("statistics")
+            if name and isinstance(blocks,list):
+                vals={}
+                for block in blocks:
+                    if not isinstance(block,dict): continue
+                    labels=block.get("labels") or block.get("names") or []
+                    raw=block.get("stats") or block.get("statistics") or []
+                    if isinstance(raw,list) and labels and len(raw)==len(labels):
+                        for label,val in zip(labels,raw):
+                            num=parse_num(val)
+                            if num is not None: vals[str(label).lower()]=num
+                if vals: out.append({"name":name,"stats":vals,"team":team_name})
             for v in node.values(): walk(v)
         elif isinstance(node,list):
             for v in node: walk(v)
@@ -159,6 +162,18 @@ def team_rows(league,team_id):
         r=row_for_event(e,league,team_id)
         if r:rows.append(r)
     return rows
+def player_candidates(rows, team_name):
+    candidates=[]
+    for r in rows:
+        for p in r.get("player_rows",[]):
+            if p.get("team")!=team_name: continue
+            st=p.get("stats",{})
+            shots=next((v for k,v in st.items() if k in ("shots","total shots","totalshots")),None)
+            sot=next((v for k,v in st.items() if k in ("shots on target","shotsontarget","sot")),None)
+            fouls=next((v for k,v in st.items() if k in ("fouls","fouls committed","foulscommitted")),None)
+            if shots is not None or sot is not None or fouls is not None:
+                candidates.append((p.get("name"),shots,sot,fouls))
+    return candidates
 
 def signal(m,a,b):
     rows=a+b
@@ -212,6 +227,22 @@ def signal(m,a,b):
         if len(vals_sot)>=4:
             lam=statistics.mean(vals_sot);line=3.5;p=poisson_over(lam,line);hr=hit_rate(vals_sot,line)
             if p>=.68 and hr>=.65:candidates.append((p,f"{name} más de {line} tiros a puerta",f"{name} promedia {lam:.1f} tiros a puerta en {len(vals_sot)} partidos; supera la línea en {hr*100:.0f}%."))
+    # Player markets: only exact labeled statistics; unresolved fields are skipped.
+    for name,rs in [(m["home"],a),(m["away"],b)]:
+        pc=player_candidates(rs,name)
+        by={}
+        for pn,shots,sot,fouls in pc:
+            z=by.setdefault(pn,{"shots":[],"sot":[],"fouls":[]})
+            if shots is not None:z["shots"].append(shots)
+            if sot is not None:z["sot"].append(sot)
+            if fouls is not None:z["fouls"].append(fouls)
+        for pn,z in by.items():
+            for key,line,label in [("shots",1.5,"tiros"),("sot",0.5,"tiros a puerta"),("fouls",1.5,"faltas cometidas")]:
+                vals=z[key]
+                if len(vals)>=3:
+                    hr=hit_rate(vals,line);avg=statistics.mean(vals)
+                    if hr>=.67:
+                        candidates.append((hr,f"{pn} más de {line} {label}",f"{pn}: promedio {avg:.2f}; supera la línea en {hr*100:.0f}% de {len(vals)} partidos medidos."))
     # Player markets are only emitted when ESPN exposes a consistent numeric player feed.
     # We intentionally do not guess stat-column positions; unresolved player stats are skipped.
     if not candidates:return None
