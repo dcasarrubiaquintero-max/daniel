@@ -139,7 +139,10 @@ def signal(m,a,b):
     rows=a+b
     if len(rows)<6:return None
     candidates=[]
+    # Goal markets: totals and BTTS from each recent match.
     goals=[r["gf"]+r["ga"] for r in rows]
+    btts=[1 if r["gf"]>0 and r["ga"]>0 else 0 for r in rows]
+    btts_rate=sum(btts)/len(btts) if btts else 0
     def hit_rate(vals,line):
         return sum(1 for x in vals if x>line)/len(vals) if vals else 0
     lam=statistics.mean(goals);p=poisson_over(lam,2.5);hr=hit_rate(goals,2.5)
@@ -148,6 +151,7 @@ def signal(m,a,b):
     if p15>=.78 and hr15>=.70:candidates.append((p15,"Más de 1.5 goles",f"Media reciente: {lam:.2f}; se superó en {hr15*100:.0f}% de la muestra."))
     p35=poisson_over(lam,3.5);hr35=hit_rate(goals,3.5)
     if p35>=.60 and hr35>=.45:candidates.append((p35,"Más de 3.5 goles",f"Media reciente: {lam:.2f}; se superó en {hr35*100:.0f}% de la muestra."))
+    if btts_rate>=.62:candidates.append((btts_rate,"Ambos equipos marcan",f"BTTS en {btts_rate*100:.0f}% de los últimos {len(rows)} partidos medidos."))
     corners=[r["corners"] for r in rows if r["corners"] is not None]
     if len(corners)>=6:
         lam=statistics.mean(corners)*2
@@ -223,7 +227,7 @@ def main():
         if s:signals.append(s)
     signals.sort(key=lambda x: x["prob"], reverse=True)
     out={"updated_at":datetime.now(timezone.utc).isoformat(),"matches":signals,"reviewed":reviewed,
-         "markets":12,"competitions":len(set(m["league"] for m in matches)),
+         "markets":15,"competitions":len(set(m["league"] for m in matches)),
          "source":"ESPN public soccer scoreboard/summaries; EdgeBet statistical model",
          "Recent-match rate + hit-rate screen; match totals aggregate both teams; strongest market only."}
     os.makedirs("data",exist_ok=True)
