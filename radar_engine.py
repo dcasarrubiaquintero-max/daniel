@@ -141,9 +141,9 @@ def player_candidates(rows, team_name):
         for p in r.get("player_rows", []):
             if p.get("team") != team_name: continue
             st = p.get("stats", {})
-            shots = next((v for k,v in st.items() if k in ("shots","total shots","totalshots")), None)
-            sot = next((v for k,v in st.items() if k in ("shots on target","shotsontarget","sot")), None)
-            fouls = next((v for k,v in st.items() if k in ("fouls","fouls committed","foulscommitted")), None)
+            shots = next((v for k,v in st.items() if k in ("shots","total shots","totalshots","sh","shot")), None)
+            sot = next((v for k,v in st.items() if k in ("shots on target","shotsontarget","sot","sog","shots on goal")), None)
+            fouls = next((v for k,v in st.items() if k in ("fouls","fouls committed","foulscommitted","fc")), None)
             z = by.setdefault(p.get("name"), {"shots":[],"sot":[],"fouls":[]})
             if shots is not None: z["shots"].append(shots)
             if sot is not None: z["sot"].append(sot)
