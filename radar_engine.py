@@ -59,26 +59,22 @@ def summary(event_id, league):
 def extract_player_rows(summary_data, team_name):
     out = []
     players = summary_data.get("boxscore", {}).get("players", []) or []
-    def walk(node):
-        if isinstance(node, dict):
-            athlete = node.get("athlete") or {}
-            name = athlete.get("displayName")
-            blocks = node.get("statistics")
-            if name and isinstance(blocks, list):
+    for block in players:
+        team = (block.get("team") or {}).get("displayName") or team_name
+        for group in block.get("statistics", []) or []:
+            labels = group.get("labels") or group.get("names") or []
+            for athlete in group.get("athletes", []) or []:
+                ar = athlete.get("athlete") or {}
+                name = ar.get("displayName") or ar.get("shortName")
+                raw = athlete.get("stats") or athlete.get("statistics") or []
                 vals = {}
-                for block in blocks:
-                    if not isinstance(block, dict): continue
-                    labels = block.get("labels") or block.get("names") or []
-                    raw = block.get("stats") or block.get("statistics") or []
-                    if isinstance(raw, list) and labels and len(raw) == len(labels):
-                        for label, val in zip(labels, raw):
-                            num = parse_num(val)
-                            if num is not None: vals[str(label).lower()] = num
-                if vals: out.append({"name": name, "stats": vals, "team": team_name})
-            for v in node.values(): walk(v)
-        elif isinstance(node, list):
-            for v in node: walk(v)
-    walk(players)
+                if name and isinstance(raw, list):
+                    for label, val in zip(labels, raw):
+                        num = parse_num(val)
+                        if num is not None:
+                            vals[str(label).lower()] = num
+                    if vals:
+                        out.append({"name": name, "stats": vals, "team": team})
     return out
 
 def extract_team_row(s, team_name):
