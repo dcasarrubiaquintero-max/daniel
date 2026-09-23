@@ -199,6 +199,36 @@ def signals_365(match):
         return out
     except Exception:
         return []
+def slugify_team(name):
+    s = unicodedata.normalize("NFKD", str(name or "")).encode("ascii","ignore").decode().lower()
+    return re.sub(r"[^a-z0-9]+","-",s).strip("-")
+
+def statz_player_pick(home, away):
+    for team, opp in [(home,away),(away,home)]:
+        try:
+            url = f"https://statz.ai/team/{slugify_team(team)}"
+            req = Request(url, headers={"User-Agent":"Mozilla/5.0 EdgeBet-AI/3.1","Accept":"text/html"})
+            with urlopen(req, timeout=8) as r:
+                html = r.read().decode("utf-8","ignore")
+            text = re.sub(r"<[^>]+>"," ",html)
+            text = re.sub(r"\s+"," ",text)
+            pos = text.lower().find(f"{team} best bet builder picks vs {opp}".lower())
+            if pos < 0: continue
+            section = text[pos:pos+1800]
+            pat = re.compile(r"([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ.'’ -]{1,55}?)\s*-\s*(\d+\+)\s+(Shots|SOT|Fouls|Fouls Drawn)\s*\((\d+)% hit rate over (\d+) games\)", re.I)
+            picks = []
+            for m in pat.finditer(section):
+                player,line,market,rate,sample=m.groups()
+                rank={"shots":0,"sot":1,"fouls":2,"fouls drawn":3}.get(market.lower(),9)
+                picks.append((rank,-int(rate),player.strip(),line,market.lower(),int(rate),int(sample)))
+            if picks:
+                _,_,player,line,market,rate,sample=sorted(picks)[0]
+                label={"shots":"tiros","sot":"tiros a puerta","fouls":"faltas cometidas","fouls drawn":"faltas recibidas"}[market]
+                return {"market":f"{player} más de {line} {label}","prob":rate/100,"why":f"Statz: {rate}% de acierto en {sample} partidos.","source":"Statz"}
+        except Exception:
+            pass
+    return None
+
 
 def signal(m, a, b):
     rows = a + b
@@ -244,10 +274,9 @@ def signal(m, a, b):
                 if hr >= .67:
                     candidates.append((hr, f"{player} más de {line} {label}", f"{player}: {sum(v>line for v in vals)}/{len(vals)} partidos por encima.", "ESPN"))
     global _365_match_budget
-    p365 = signals_365(m) if _365_match_budget > 0 else []
-    if p365: _365_match_budget -= 1
-    for x in p365:
-        candidates.append((x["prob"]/100, x["market"], x["why"], x["source"]))
+    sp = statz_player_pick(m["home"], m["away"])
+    if sp:
+        candidates.append((sp["prob"], sp["market"], sp["why"], sp["source"]))
     if not candidates:
         fallback = []
         if goals:
