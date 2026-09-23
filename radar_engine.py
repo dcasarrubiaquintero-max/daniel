@@ -192,7 +192,9 @@ def main():
         for e in data.get("events", []):
             if e.get("status",{}).get("type") != "notstarted":
                 continue
-            tournament = e.get("tournament",{})\n            unique = e.get("tournament",{}).get("uniqueTournament",{})\n            league = classify(unique.get("name","")) or classify(tournament.get("name",""))
+            tournament = e.get("tournament",{})
+            unique = e.get("tournament",{}).get("uniqueTournament",{})
+            league = classify(unique.get("name","")) or classify(tournament.get("name",""))
             if not league:
                 continue
             hid = e.get("homeTeam",{}).get("id")
