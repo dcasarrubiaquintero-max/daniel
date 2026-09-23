@@ -325,7 +325,8 @@ def signal(m, a, b):
     else:
         ov = PLAYER_OVERRIDES.get((m["home"], m["away"], m["date"]))
         if ov:
-            p, market, why, source = ov
+            market, p, why = ov
+            source = "Statz"
         else:
             player_candidates_scored = [x for x in candidates if (" tiros" in x[1] or "tiros a puerta" in x[1] or "faltas cometidas" in x[1]) and not x[1].startswith("Más de ")]
             strong_players = [x for x in player_candidates_scored if x[0] >= .67]
