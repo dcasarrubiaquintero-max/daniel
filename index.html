@@ -12,18 +12,61 @@
 <header class="top"><div class="brand">⚡ EdgeBet <b>AI</b></div><div class="status" id="status"><i class="dot"></i> CONECTANDO RADAR</div></header>
 <section class="hero"><div class="eyebrow">Motor de señales</div><h1>🚨 Radar de pronósticos</h1><div class="sub">Revisa partidos próximos y muestra solo señales que superen el filtro estadístico. El objetivo es analizar datos históricos y actuales, no llenar el panel con mercados genéricos.</div>
 <div class="stats"><div class="stat"><div class="n" id="nSignals">—</div><small>Señales actuales</small></div><div class="stat"><div class="n" id="reviewed">—</div><small>Partidos revisados</small></div><div class="stat"><div class="n" id="markets">—</div><small>Mercados evaluados</small></div><div class="stat"><div class="n" id="comps">—</div><small>Competiciones</small></div><div class="stat"><div class="n" id="clock">--:--</div><small>Última revisión</small></div></div></section>
-<div class="controls" id="tabs"><button class="tab active" data-filter="all">Todas</button><button class="tab" data-filter="Premier League">Premier League</button><button class="tab" data-filter="LaLiga">LaLiga</button><button class="tab" data-filter="Serie A">Serie A</button><button class="tab" data-filter="Bundesliga">Bundesliga</button><button class="tab" data-filter="Ligue 1">Ligue 1</button><button class="tab" data-filter="Champions">Champions</button><button class="tab" data-filter="Europa League">Europa League</button><button class="tab" data-filter="Nations League">Nations League</button><button class="tab" data-filter="Amistosos">Amistosos</button><button class="primary" id="refreshBtn">↻ Actualizar radar</button></div>
+<div class="controls" id="tabs"><button class="tab active" data-filter="all">Todas</button><button class="tab" data-filter="Premier League">Premier League</button><button class="tab" data-filter="LaLiga">LaLiga</button><button class="tab" data-filter="Serie A">Serie A</button><button class="tab" data-filter="Bundesliga">Bundesliga</button><button class="tab" data-filter="Ligue 1">Ligue 1</button><button class="tab" data-filter="Champions">Champions</button><button class="tab" data-filter="Europa League">Europa League</button><button class="tab" data-filter="Nations League">Nations League</button><button class="tab" data-filter="Amistosos">Amistosos</button><button class="primary" id="refreshBtn">↻ Actualizar radar</button><button id="notifyBtn">🔔 Activar alertas</button></div>
 <section class="section"><h2>Nuevas señales</h2><p>Si no hay evidencia suficiente, EdgeBet no publica una señal.</p></section>
 <div class="grid" id="signals"></div>
 <div class="note" id="note">⏳ Conectando con el motor…</div>
 <section class="history"><div class="row head"><div>Partido</div><div>Mercado</div><div>Estado</div><div>Modelo</div></div><div class="row"><div>Historial de señales</div><div>Se guardará aquí</div><div>Esperando</div><div>—</div></div></section>
 </div>
 <script>
-let filter='all',live=[],lastData=null;
+let filter='all',live=[],lastData=null,previousIds=new Set(),history=[];
 const $=id=>document.getElementById(id);
+const key='edgebet_history_v1';
+try{history=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){history=[]}
 function status(t){$('status').innerHTML='<i class="dot"></i> '+t}
-function render(){let arr=filter==='all'?live:live.filter(x=>x.league===filter);$('nSignals').textContent=arr.length;$('reviewed').textContent=lastData?.reviewed??'—';$('markets').textContent=lastData?.markets??'—';$('comps').textContent=lastData?.competitions??'—';$('signals').innerHTML=arr.length?arr.map(x=>'<article class="card"><div class="stripe"></div><div class="league">'+esc(x.league)+'</div><div class="match">'+esc(x.match)+'</div><div class="time">'+esc((x.date||'')+' '+(x.time||''))+'</div><div class="market">🎯 <span>'+esc(x.market||'Señal detectada')+'</span></div><div class="metrics"><span class="pill">Prob. modelo: '+esc(String(x.prob??'—'))+'%</span><span class="pill">Confianza: '+esc(x.confidence||'—')+'</span></div><div class="analysis">'+esc(x.why||'Evidencia estadística disponible.')+'</div></article>').join(''):'<div class="empty">No hay señales que superen el filtro de evidencia.</div>'}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-async function refresh(){ $('clock').textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});status('ACTUALIZANDO RADAR');try{const r=await fetch('./data/radar.json?ts='+Date.now());if(!r.ok)throw Error();const d=await r.json();lastData=d;live=d.matches||[];status('RADAR ACTUALIZADO');$('note').innerHTML='🟢 <b>Radar actualizado.</b> EdgeBet procesó datos recientes y publicó solo las señales que superaron el filtro.'}catch(e){lastData=null;live=[];status('SIN DATOS');$('note').innerHTML='🟡 <b>Esperando radar.</b> El motor automático aún no ha publicado datos.'}render()}
-document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.filter;render()}));$('refreshBtn').addEventListener('click',refresh);refresh();setInterval(refresh,300000);
+function render(){
+  let arr=filter==='all'?live:live.filter(x=>x.league===filter);
+  $('nSignals').textContent=arr.length;$('reviewed').textContent=lastData?.reviewed??'—';$('markets').textContent=lastData?.markets??'—';$('comps').textContent=lastData?.competitions??'—';
+  $('signals').innerHTML=arr.length?arr.map(x=>'<article class="card"><div class="stripe"></div><div class="league">'+esc(x.league)+'</div><div class="match">'+esc(x.match)+'</div><div class="time">'+esc((x.date||'')+' '+(x.time||''))+'</div><div class="market">🎯 <span>'+esc(x.market||'Señal detectada')+'</span></div><div class="metrics"><span class="pill">Prob. modelo: '+esc(String(x.prob??'—'))+'%</span><span class="pill">Confianza: '+esc(x.confidence||'—')+'</span><span class="pill">Fuente: '+esc(x.source||'Radar')+'</span></div><div class="analysis">'+esc(x.why||'Evidencia estadística disponible.')+'</div></article>').join(''):'<div class="empty">No hay señales que superen el filtro de evidencia.</div>';
+  renderHistory();
+}
+function renderHistory(){
+  const box=document.querySelector('.history');if(!box)return;
+  box.innerHTML='<div class="row head"><div>Partido</div><div>Mercado</div><div>Prob.</div><div>Fecha</div></div>'+(
+    history.length?history.slice(0,20).map(x=>'<div class="row"><div>'+esc(x.match)+'</div><div>'+esc(x.market)+'</div><div>'+esc(String(x.prob))+'%</div><div>'+esc(x.date||'')+'</div></div>').join(''):
+    '<div class="row"><div>Historial de señales</div><div>Esperando</div><div>—</div><div>—</div></div>'
+  );
+}
+async function enableNotifications(){
+  if(!('Notification' in window)){alert('Este navegador no permite notificaciones.');return}
+  const p=await Notification.requestPermission();
+  $('notifyBtn').textContent=p==='granted'?'🔔 Alertas activadas':'🔕 Alertas desactivadas';
+}
+function notifyNew(arr){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  arr.filter(x=>!previousIds.has((x.match||'')+'|'+(x.market||'')+'|'+(x.date||''))).slice(0,5).forEach(x=>{
+    try{new Notification('EdgeBet AI — nueva señal',{body:x.match+' • '+x.market+' • '+x.prob+'%'});}catch(e){}
+  });
+}
+async function refresh(){
+  $('clock').textContent=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+  status('ACTUALIZANDO RADAR');
+  try{
+    const r=await fetch('./data/radar.json?ts='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error();
+    const d=await r.json();lastData=d;live=d.matches||[];
+    const ids=new Set(live.map(x=>(x.match||'')+'|'+(x.market||'')+'|'+(x.date||'')));
+    const fresh=live.filter(x=>!previousIds.has((x.match||'')+'|'+(x.market||'')+'|'+(x.date||'')));
+    if(previousIds.size)notifyNew(live);
+    fresh.forEach(x=>history.unshift(x));
+    history=history.filter((x,i,a)=>i===a.findIndex(y=>(y.match||'')===x.match&&(y.market||'')===x.market&&(y.date||'')===x.date)).slice(0,50);
+    try{localStorage.setItem(key,JSON.stringify(history))}catch(e){}
+    previousIds=ids;
+    status('RADAR ACTUALIZADO');$('note').innerHTML='🟢 <b>Radar actualizado.</b> Solo se muestran señales que superaron el filtro estadístico.';
+  }catch(e){status('SIN DATOS');$('note').innerHTML='🟡 <b>Esperando radar.</b> El motor automático aún no ha publicado datos.'}
+  render();
+}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.filter;render()}));
+$('refreshBtn').addEventListener('click',refresh);$('notifyBtn').addEventListener('click',enableNotifications);
+render();refresh();setInterval(refresh,300000);
 </script></body></html>
