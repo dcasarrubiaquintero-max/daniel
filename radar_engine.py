@@ -248,7 +248,8 @@ def statz_player_pick(home, away):
 
 def signal(m, a, b):
     rows = a + b
-    if len(rows) < 6:
+    statz_pick = statz_player_pick(m["home"], m["away"])
+    if len(rows) < 3:
         ov = PLAYER_OVERRIDES.get((m["home"], m["away"], m["date"]))
         if ov:
             return {"league":m["league"],"match":f'{m["home"]} vs {m["away"]}',"date":m["date"],"time":m["time"],
@@ -262,6 +263,8 @@ def signal(m, a, b):
     ov = PLAYER_OVERRIDES.get((m["home"], m["away"], m["date"]))
     if ov:
         candidates.append((ov[1], ov[0], ov[2], "Statz"))
+    if statz_pick:
+        candidates.append((statz_pick["prob"], statz_pick["market"], statz_pick["why"], statz_pick["source"]))
     goals = [r["gf"] + r["ga"] for r in rows]
     lam = statistics.mean(goals)
     for line, minp, minhr, label in [(1.5,.78,.70,"Más de 1.5 goles"),(2.5,.66,.55,"Más de 2.5 goles"),(3.5,.60,.45,"Más de 3.5 goles")]:
@@ -395,10 +398,10 @@ def main():
         a, b = team_rows(m["league"], m["home_id"]), team_rows(m["league"], m["away_id"])
         s = signal(m, a, b)
         if s: signals.append(s)
-    signals.sort(key=lambda x: x["prob"], reverse=True)
+    signals.sort(key=lambda x: (x["prob"] > 0, x["prob"]), reverse=True)
     out = {
         "updated_at": datetime.now(timezone.utc).isoformat(),
-        "matches": signals, "reviewed": reviewed,
+        "matches": signals, "reviewed": reviewed, "signals": sum(1 for x in signals if x["prob"] > 0),
         "markets": 18, "competitions": len(set(m["league"] for m in matches)),
         "source": "ESPN public soccer data + optional 365Scores player enrichment",
         "model": "Recent-match rates + Poisson screen + player hit-rate filter; strongest market per match.",
