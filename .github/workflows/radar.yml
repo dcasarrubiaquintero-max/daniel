@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "radar_engine.py"
+      - "scores365_client.py"
       - ".github/workflows/radar.yml"
   workflow_dispatch:
   schedule:
@@ -26,6 +27,7 @@ jobs:
 
       - name: Generate radar
         run: python radar_engine.py
+        continue-on-error: false
 
       - name: Publish radar data
         run: |
