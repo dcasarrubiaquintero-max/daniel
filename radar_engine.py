@@ -109,6 +109,21 @@ def row_for_event(e,league,team_id):
     opp=s["away"] if side_home else s["home"]
     row=extract_team_row(s,team)
     if not row:return None
+    # Match-level totals: aggregate both teams so cards/fouls are not double-counted as one side.
+    team_blocks=s.get("stats",[]) or []
+    all_cards=[];all_fouls=[]
+    for b in team_blocks:
+        vals={}
+        for x in b.get("statistics",[]) or []:
+            label=(x.get("name") or x.get("displayName") or "").lower()
+            val=parse_num(x.get("displayValue",x.get("value")))
+            if val is not None: vals[label]=val
+        for k,v in vals.items():
+            if "yellow card" in k: all_cards.append(v); break
+        for k,v in vals.items():
+            if "foul" in k: all_fouls.append(v); break
+    row["total_cards"]=sum(all_cards) if len(all_cards)==2 else None
+    row["total_fouls"]=sum(all_fouls) if len(all_fouls)==2 else None
     row["opp"]=opp
     row["venue"]="home" if side_home else "away"
     return row
@@ -145,6 +160,14 @@ def signal(m,a,b):
         p=poisson_over(lam,21.5)
         hr=hit_rate(shots,21.5)
         if p>=.66 and hr>=.55:candidates.append((p,"Más de 21.5 tiros",f"Ritmo reciente estimado: {lam:.1f}; se superó en {hr*100:.0f}% de la muestra."))
+    total_cards=[r["total_cards"] for r in rows if r.get("total_cards") is not None]
+    if len(total_cards)>=6:
+        lam=statistics.mean(total_cards);p=poisson_over(lam,4.5);hr=hit_rate(total_cards,4.5)
+        if p>=.66 and hr>=.55:candidates.append((p,"Más de 4.5 tarjetas",f"Media reciente: {lam:.2f}; se superó en {hr*100:.0f}% de la muestra."))
+    total_fouls=[r["total_fouls"] for r in rows if r.get("total_fouls") is not None]
+    if len(total_fouls)>=6:
+        lam=statistics.mean(total_fouls);p=poisson_over(lam,21.5);hr=hit_rate(total_fouls,21.5)
+        if p>=.66 and hr>=.55:candidates.append((p,"Más de 21.5 faltas",f"Media reciente: {lam:.1f}; se superó en {hr*100:.0f}% de la muestra."))
     cards=[r["cards"] for r in rows if r["cards"] is not None]
     if len(cards)>=6:
         lam=statistics.mean(cards)
@@ -200,9 +223,9 @@ def main():
         if s:signals.append(s)
     signals.sort(key=lambda x: x["prob"], reverse=True)
     out={"updated_at":datetime.now(timezone.utc).isoformat(),"matches":signals,"reviewed":reviewed,
-         "markets":10,"competitions":len(set(m["league"] for m in matches)),
+         "markets":12,"competitions":len(set(m["league"] for m in matches)),
          "source":"ESPN public soccer scoreboard/summaries; EdgeBet statistical model",
-         "model":"Recent-match rate + hit-rate screen with minimum coverage; strongest market only."}
+         "Recent-match rate + hit-rate screen; match totals aggregate both teams; strongest market only."}
     os.makedirs("data",exist_ok=True)
     with open("data/radar.json","w",encoding="utf-8") as f:json.dump(out,f,ensure_ascii=False,indent=2)
     print(json.dumps({"reviewed":reviewed,"signals":len(signals),"competitions":out["competitions"]}))
