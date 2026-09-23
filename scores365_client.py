@@ -35,7 +35,7 @@ def get_json(path, **params):
 def game(game_id):
     return get_json("game/", gameId=game_id).get("game", {})
 
-def player_stats(game_id):
+def _stat_number(stats, *keys):\n    for k in keys:\n        if k in stats:\n            try: return float(stats[k])\n            except (TypeError, ValueError): pass\n    return None\n\ndef normalize_player_stats(game_id):\n    raw = player_stats(game_id)\n    out=[]\n    for team in raw.get("teams",[]):\n        for p in team.get("players",[]):\n            st=p.get("stats",{})\n            out.append({\n                "game_id":game_id,"team":team.get("team"),"player_id":p.get("player_id"),\n                "name":p.get("name"),"starter":p.get("starter"),"rating":p.get("rating"),\n                "shots":_stat_number(st,"shots","totalShots","Total Shots"),\n                "shots_on_target":_stat_number(st,"shotsOnTarget","shots on target","Shots on target"),\n                "fouls_committed":_stat_number(st,"foulsCommitted","fouls","Fouls"),\n                "minutes":_stat_number(st,"minutes","Minutes"),\n                "xg":_stat_number(st,"xG","xg","Expected Goals")\n            })\n    return out\n\ndef player_signal(history, line, field, market):\n    vals=[x[field] for x in history if isinstance(x.get(field),(int,float))]\n    if len(vals)<5: return None\n    hits=sum(v>line for v in vals)\n    rate=hits/len(vals)\n    avg=sum(vals)/len(vals)\n    if rate<0.70: return None\n    return {"market":market,"prob":round(rate*100,1),"avg":round(avg,2),"sample":len(vals)}\n\ndef player_stats(game_id):
     g = game(game_id)
     members = {m.get("id"): m for m in g.get("members", [])}
     teams = []
