@@ -7,13 +7,13 @@ try:
 except Exception:
     find_match = fixture_rows = normalize_player_stats = lineups = None
 
-BASE = "https://site.api.espn.com/apis/site/v2/sports/soccer"
+BASE = "https://site.web.api.espn.com/apis/site/v2/sports/soccer"
 LEAGUES = {
     "Premier League":"eng.1", "LaLiga":"esp.1", "Serie A":"ita.1",
     "Bundesliga":"ger.1", "Ligue 1":"fra.1", "Champions League":"uefa.champions",
     "Europa League":"uefa.europa", "Nations League":"uefa.nations", "Amistosos":"fifa.friendly",
 }
-UA = "EdgeBet-AI/3.0"
+UA = "EdgeBet-AI/3.1"
 
 def get_json(url):
     req = Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
