@@ -7,7 +7,7 @@ try:
 except Exception:
     find_match = fixture_rows = normalize_player_stats = lineups = None
 
-BASE = "https://site.web.api.espn.com/apis/site/v2/sports/soccer"
+BASE = "https://site.api.espn.com/apis/site/v2/sports/soccer"
 LEAGUES = {
     "Premier League":"eng.1", "LaLiga":"esp.1", "Serie A":"ita.1",
     "Bundesliga":"ger.1", "Ligue 1":"fra.1", "Champions League":"uefa.champions",
@@ -282,7 +282,7 @@ def upcoming(league, date):
 def main():
     now = datetime.now(timezone.utc)
     matches, seen = [], set()
-    for i in range(10):
+    for i in range(14):
         day = (now + timedelta(days=i)).date().isoformat()
         for league in LEAGUES:
             for m in upcoming(league, day):
