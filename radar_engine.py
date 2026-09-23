@@ -248,7 +248,16 @@ def statz_player_pick(home, away):
 
 def signal(m, a, b):
     rows = a + b
-    if len(rows) < 6: return None
+    if len(rows) < 6:
+        ov = PLAYER_OVERRIDES.get((m["home"], m["away"], m["date"]))
+        if ov:
+            return {"league":m["league"],"match":f'{m["home"]} vs {m["away"]}',"date":m["date"],"time":m["time"],
+                    "market":ov[0],"prob":round(ov[1]*100,1),"confidence":"ALTA","why":ov[2],
+                    "source":"Statz","sample":len(rows),"generated_at":datetime.now(timezone.utc).isoformat()}
+        return {"league":m["league"],"match":f'{m["home"]} vs {m["away"]}',"date":m["date"],"time":m["time"],
+                "market":"SIN SEÑAL — datos insuficientes","prob":0,"confidence":"DATOS INSUFICIENTES",
+                "why":"No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
+                "source":"Radar","sample":len(rows),"generated_at":datetime.now(timezone.utc).isoformat()}
     candidates = []
     ov = PLAYER_OVERRIDES.get((m["home"], m["away"], m["date"]))
     if ov:
