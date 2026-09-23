@@ -286,8 +286,8 @@ def main():
     signals.sort(key=lambda x: x["prob"], reverse=True)
     out={"updated_at":datetime.now(timezone.utc).isoformat(),"matches":signals,"reviewed":reviewed,
          "markets":15,"competitions":len(set(m["league"] for m in matches)),
-         "source":"ESPN public soccer scoreboard/summaries; EdgeBet statistical model",
-         "Recent-match rate + hit-rate screen; match totals aggregate both teams; strongest market only."}
+         "source":"ESPN public soccer data + EdgeBet statistical model; 365Scores integration pending a stable authorized data endpoint.",
+         "model":"Recent-match rate + hit-rate screen; match totals aggregate both teams; strongest market only."}
     os.makedirs("data",exist_ok=True)
     with open("data/radar.json","w",encoding="utf-8") as f:json.dump(out,f,ensure_ascii=False,indent=2)
     print(json.dumps({"reviewed":reviewed,"signals":len(signals),"competitions":out["competitions"]}))
