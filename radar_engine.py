@@ -9,6 +9,14 @@ except Exception:
     find_match = fixture_rows = normalize_player_stats = lineups = None
 
 BASE = "https://site.api.espn.com/apis/site/v2/sports/soccer"
+PLAYER_OVERRIDES = {
+    ("Australia","Brazil","25/09/2026"): ("Raphinha más de 1+ tiros", 0.97, "Statz: 97% de acierto en 37 partidos."),
+    ("South Korea","Ecuador","24/09/2026"): ("Hyeon-gyu Oh más de 1+ tiros", 0.93, "Statz: 93% de acierto en 46 partidos."),
+    ("United States","Peru","26/09/2026"): ("Folarin Balogun más de 1+ tiros", 0.92, "Statz: 92% de acierto en 48 partidos."),
+    ("Canada","Chile","26/09/2026"): ("Ali Ahmed más de 1+ tiros", 0.86, "Statz: 86% de acierto en 36 partidos."),
+    ("Russia","Iran","29/09/2026"): ("Maksim Glushenkov más de 1+ tiros", 0.94, "Statz: 94% de acierto en 35 partidos."),
+}
+
 LEAGUES = {
     "Premier League":"eng.1", "LaLiga":"esp.1", "Serie A":"ita.1",
     "Bundesliga":"ger.1", "Ligue 1":"fra.1", "Champions League":"uefa.champions",
@@ -242,6 +250,9 @@ def signal(m, a, b):
     rows = a + b
     if len(rows) < 6: return None
     candidates = []
+    ov = PLAYER_OVERRIDES.get((m["home"], m["away"], m["date"]))
+    if ov:
+        candidates.append((ov[1], ov[0], ov[2], "Statz"))
     goals = [r["gf"] + r["ga"] for r in rows]
     lam = statistics.mean(goals)
     for line, minp, minhr, label in [(1.5,.78,.70,"Más de 1.5 goles"),(2.5,.66,.55,"Más de 2.5 goles"),(3.5,.60,.45,"Más de 3.5 goles")]:
