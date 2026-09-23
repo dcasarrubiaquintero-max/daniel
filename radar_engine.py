@@ -1,5 +1,6 @@
 import json, math, os, re, statistics
 from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
 from urllib.request import Request, urlopen
 
 try:
@@ -248,8 +249,27 @@ def signal(m, a, b):
     p365 = signals_365(m)
     for x in p365:
         candidates.append((x["prob"]/100, x["market"], x["why"], x["source"]))
-    if not candidates: return None
-    p, market, why, source = max(candidates, key=lambda x:x[0])
+    if not candidates:
+        fallback = []
+        if goals:
+            fallback.append((hit_rate(goals, 1.5), "Más de 1.5 goles", f"Histórico reciente: {sum(v>1.5 for v in goals)}/{len(goals)} supera 1.5.", "ESPN"))
+        for field, line, label in [("corners",8.5,"Más de 8.5 córners"),("shots",21.5,"Más de 21.5 tiros")]:
+            vals = [r[field] for r in rows if r.get(field) is not None]
+            if vals: fallback.append((hit_rate(vals, line), label, f"Histórico reciente: {sum(v>line for v in vals)}/{len(vals)} supera la línea.", "ESPN"))
+        for player, z in pc.items():
+            for field, line, label in [("shots",1.5,"tiros"),("sot",.5,"tiros a puerta"),("fouls",1.5,"faltas cometidas")]:
+                vals = z[field]
+                if len(vals) >= 3:
+                    fallback.append((hit_rate(vals, line), f"{player} más de {line} {label}", f"{player}: {sum(v>line for v in vals)}/{len(vals)} partidos por encima.", "ESPN"))
+        if fallback:
+            p, market, why, source = max(fallback, key=lambda x:x[0])
+        else:
+            return {"league":m["league"],"match":f'{m["home"]} vs {m["away"]}',"date":m["date"],"time":m["time"],
+                    "market":"SIN SEÑAL — datos insuficientes","prob":0,"confidence":"DATOS INSUFICIENTES",
+                    "why":"No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.","source":"Radar","sample":len(rows),
+                    "generated_at":datetime.now(timezone.utc).isoformat()}
+    else:
+        p, market, why, source = max(candidates, key=lambda x:x[0])
     return {
         "league": m["league"], "match": f'{m["home"]} vs {m["away"]}',
         "date": m["date"], "time": m["time"], "market": market,
@@ -278,11 +298,11 @@ def parse_upcoming_events(data, league):
         a = next((x for x in teams if x.get("homeAway") == "away"), teams[-1])
         if c.get("status", {}).get("type", {}).get("completed"): continue
         if not h.get("team", {}).get("id") or not a.get("team", {}).get("id"): continue
-        try: dt = datetime.fromisoformat(e["date"].replace("Z","+00:00"))
+        try: dt = datetime.fromisoformat(e["date"].replace("Z","+00:00")).astimezone(ZoneInfo("America/Bogota"))
         except Exception: continue
         out.append({"id": e["id"], "home": h["team"]["displayName"], "away": a["team"]["displayName"],
                     "home_id": h["team"]["id"], "away_id": a["team"]["id"], "league": league,
-                    "date": dt.date().isoformat(), "time": dt.strftime("%H:%M UTC")})
+                    "date": dt.strftime("%d/%m/%Y"), "time": dt.strftime("%H:%M") + " COL"})
     return out
 
 def upcoming(league, date):
