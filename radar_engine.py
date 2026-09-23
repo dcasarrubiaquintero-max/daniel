@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 from urllib.request import Request, urlopen
 
 try:
-    from scores365_client import find_match, fixture_rows, normalize_player_stats, lineups
+    from scores365_client import find_match, fixture_rows, normalize_player_stats, lineups, norm
 except Exception:
     find_match = fixture_rows = normalize_player_stats = lineups = None
 
@@ -173,7 +173,7 @@ def signals_365(match):
                 name = p.get("name")
                 if not name or norm(p.get("team")) not in target_teams: continue
                 player_history.setdefault(name, []).append(p)
-        upcoming_365 = find_match(match["league"], match["home"], match["away"], match["date"])
+        upcoming_365 = find_match(match["league"], match["home"], match["away"], match.get("date_iso", match["date"]))
         starters = set()
         if upcoming_365:
             for t in (lineups(upcoming_365["id"]).get("teams", []) if lineups else []):
@@ -302,7 +302,7 @@ def parse_upcoming_events(data, league):
         except Exception: continue
         out.append({"id": e["id"], "home": h["team"]["displayName"], "away": a["team"]["displayName"],
                     "home_id": h["team"]["id"], "away_id": a["team"]["id"], "league": league,
-                    "date": dt.strftime("%d/%m/%Y"), "time": dt.strftime("%H:%M") + " COL"})
+                    "date": dt.strftime("%d/%m/%Y"), "date_iso": dt.date().isoformat(), "time": dt.strftime("%H:%M") + " COL"})
     return out
 
 def upcoming(league, date):
