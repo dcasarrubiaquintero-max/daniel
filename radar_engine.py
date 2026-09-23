@@ -204,6 +204,7 @@ def slugify_team(name):
     return re.sub(r"[^a-z0-9]+","-",s).strip("-")
 
 _STATZ_CACHE = {}
+_STATZ_BUDGET = 50
 
 def statz_player_pick(home, away):
     for team, opp in [(home,away),(away,home)]:
@@ -281,8 +282,10 @@ def signal(m, a, b):
                 if hr >= .67:
                     candidates.append((hr, f"{player} más de {line} {label}", f"{player}: {sum(v>line for v in vals)}/{len(vals)} partidos por encima.", "ESPN"))
     global _365_match_budget
-    sp = statz_player_pick(m["home"], m["away"])
+    global _STATZ_BUDGET
+    sp = statz_player_pick(m["home"], m["away"]) if _STATZ_BUDGET > 0 else None
     if sp:
+        _STATZ_BUDGET -= 1
         candidates.append((sp["prob"], sp["market"], sp["why"], sp["source"]))
     if not candidates:
         fallback = []
