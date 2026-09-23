@@ -181,18 +181,18 @@ def classify(tname):
 
 def main():
     now = datetime.now(timezone.utc)
-    days = [(now + timedelta(days=i)).date().isoformat() for i in range(0, 4)]
+    days = [(now + timedelta(days=i)).date().isoformat() for i in range(0, 8)]
     matches = []
     seen = set()
     for day in days:
         try:
-            data = get_json(f"{BASE}/sport/football/scheduled-events/{day}")
+            data = get_json(f"{BASE}/sport/football/scheduled-events/{day}/inverse")
         except Exception:
             continue
         for e in data.get("events", []):
             if e.get("status",{}).get("type") != "notstarted":
                 continue
-            league = classify(e.get("tournament",{}).get("name",""))
+            tournament = e.get("tournament",{})\n            unique = e.get("tournament",{}).get("uniqueTournament",{})\n            league = classify(unique.get("name","")) or classify(tournament.get("name",""))
             if not league:
                 continue
             hid = e.get("homeTeam",{}).get("id")
