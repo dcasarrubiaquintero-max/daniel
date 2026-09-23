@@ -1,299 +1,306 @@
 import json, math, os, re, statistics
-try:\n    from scores365_client import player_stats as scores365_player_stats\nexcept Exception:\n    scores365_player_stats = None
 from datetime import datetime, timezone, timedelta
 from urllib.request import Request, urlopen
 
+try:
+    from scores365_client import find_match, fixture_rows, normalize_player_stats, lineups
+except Exception:
+    find_match = fixture_rows = normalize_player_stats = lineups = None
+
 BASE = "https://site.api.espn.com/apis/site/v2/sports/soccer"
 LEAGUES = {
-    "Premier League":"eng.1",
-    "LaLiga":"esp.1",
-    "Serie A":"ita.1",
-    "Bundesliga":"ger.1",
-    "Ligue 1":"fra.1",
-    "Champions League":"uefa.champions",
-    "Europa League":"uefa.europa",
-    "Nations League":"uefa.nations",
-    "Amistosos":"fifa.friendly",
+    "Premier League":"eng.1", "LaLiga":"esp.1", "Serie A":"ita.1",
+    "Bundesliga":"ger.1", "Ligue 1":"fra.1", "Champions League":"uefa.champions",
+    "Europa League":"uefa.europa", "Nations League":"uefa.nations", "Amistosos":"fifa.friendly",
 }
-UA="EdgeBet-AI/2.0"
+UA = "EdgeBet-AI/3.0"
 
 def get_json(url):
-    req=Request(url,headers={"User-Agent":UA,"Accept":"application/json"})
-    with urlopen(req,timeout=20) as r:
+    req = Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
+    with urlopen(req, timeout=20) as r:
         return json.loads(r.read().decode("utf-8"))
 
 def parse_num(v):
-    if v is None:return None
-    if isinstance(v,(int,float)):return float(v)
-    m=re.search(r"-?\d+(?:[\.,]\d+)?",str(v))
-    return float(m.group(0).replace(",",".")) if m else None
+    if v is None: return None
+    if isinstance(v, (int, float)): return float(v)
+    m = re.search(r"-?\d+(?:[\.,]\d+)?", str(v))
+    return float(m.group(0).replace(",", ".")) if m else None
 
-def poisson_over(lam,threshold):
-    if lam<=0:return 0.0
-    k=int(math.floor(threshold))
-    return 1-sum(math.exp(-lam)*lam**i/math.factorial(i) for i in range(k+1))
+def poisson_over(lam, threshold):
+    if lam <= 0: return 0.0
+    k = int(math.floor(threshold))
+    return max(0.0, min(1.0, 1 - sum(math.exp(-lam)*lam**i/math.factorial(i) for i in range(k+1))))
 
-def stat_value(stats,name):
-    for s in stats or []:
-        label=(s.get("name") or s.get("displayName") or "").lower()
-        if name in label:
-            return parse_num(s.get("value"))
-    return None
+def hit_rate(vals, line):
+    return sum(1 for x in vals if x > line) / len(vals) if vals else 0.0
+
+def summary(event_id, league):
+    try:
+        d = get_json(f"{BASE}/{LEAGUES[league]}/summary?event={event_id}")
+    except Exception:
+        return None
+    comps = d.get("header", {}).get("competitions", [])
+    if not comps: return None
+    teams = comps[0].get("competitors", [])
+    if len(teams) != 2: return None
+    home = next((x for x in teams if x.get("homeAway") == "home"), teams[0])
+    away = next((x for x in teams if x.get("homeAway") == "away"), teams[-1])
+    hs, aws = parse_num(home.get("score")), parse_num(away.get("score"))
+    if hs is None or aws is None: return None
+    return {
+        "home": home.get("team", {}).get("displayName"),
+        "away": away.get("team", {}).get("displayName"),
+        "gf": hs, "ga": aws,
+        "stats": d.get("boxscore", {}).get("teams", []),
+        "players": d.get("boxscore", {}).get("players", []),
+    }
 
 def extract_player_rows(summary_data, team_name):
-    """Normalize ESPN player boxscore rows when labels are exposed."""
-    out=[]
-    players=summary_data.get("boxscore",{}).get("players",[]) or []
+    out = []
+    players = summary_data.get("boxscore", {}).get("players", []) or []
     def walk(node):
-        if isinstance(node,dict):
-            athlete=node.get("athlete") or {}
-            name=athlete.get("displayName")
-            blocks=node.get("statistics")
-            if name and isinstance(blocks,list):
-                vals={}
+        if isinstance(node, dict):
+            athlete = node.get("athlete") or {}
+            name = athlete.get("displayName")
+            blocks = node.get("statistics")
+            if name and isinstance(blocks, list):
+                vals = {}
                 for block in blocks:
-                    if not isinstance(block,dict): continue
-                    labels=block.get("labels") or block.get("names") or []
-                    raw=block.get("stats") or block.get("statistics") or []
-                    if isinstance(raw,list) and labels and len(raw)==len(labels):
-                        for label,val in zip(labels,raw):
-                            num=parse_num(val)
-                            if num is not None: vals[str(label).lower()]=num
-                if vals: out.append({"name":name,"stats":vals,"team":team_name})
+                    if not isinstance(block, dict): continue
+                    labels = block.get("labels") or block.get("names") or []
+                    raw = block.get("stats") or block.get("statistics") or []
+                    if isinstance(raw, list) and labels and len(raw) == len(labels):
+                        for label, val in zip(labels, raw):
+                            num = parse_num(val)
+                            if num is not None: vals[str(label).lower()] = num
+                if vals: out.append({"name": name, "stats": vals, "team": team_name})
             for v in node.values(): walk(v)
-        elif isinstance(node,list):
+        elif isinstance(node, list):
             for v in node: walk(v)
     walk(players)
     return out
 
-def summary_stats(event_id):
-    try:d=get_json(f"{BASE}/eng.1/summary?event={event_id}")
-    except Exception:return {}
-    out={}
-    box=d.get("boxscore",{}).get("teams",[])
-    for b in box:
-        team=b.get("team",{}).get("displayName")
-        vals={}
-        for s in b.get("statistics",[]) or []:
-            label=(s.get("name") or s.get("displayName") or "").lower()
-            val=parse_num(s.get("displayValue",s.get("value")))
-            if val is not None: vals[label]=val
-        if team:out[team]=vals
-    return out
-
-def summary(event_id,league):
-    try:d=get_json(f"{BASE}/{LEAGUES[league]}/summary?event={event_id}")
-    except Exception:return None
-    comps=d.get("header",{}).get("competitions",[])
-    if not comps:return None
-    c=comps[0]
-    teams=c.get("competitors",[])
-    if len(teams)!=2:return None
-    home=next((x for x in teams if x.get("homeAway")=="home"),teams[0])
-    away=next((x for x in teams if x.get("homeAway")=="away"),teams[-1])
-    hs=parse_num(home.get("score")); aws=parse_num(away.get("score"))
-    if hs is None or aws is None:return None
-    return {"home":home.get("team",{}).get("displayName"),"away":away.get("team",{}).get("displayName"),
-            "gf":hs,"ga":aws,"stats":d.get("boxscore",{}).get("teams",[]),
-            "players":d.get("boxscore",{}).get("players",[])}
-
-def extract_team_row(s,team_name):
-    for b in s.get("stats",[]) or []:
-        if b.get("team",{}).get("displayName")==team_name:
-            vals={}
-            for x in b.get("statistics",[]) or []:
-                label=(x.get("name") or x.get("displayName") or "").lower()
-                val=parse_num(x.get("displayValue",x.get("value")))
-                if val is not None: vals[label]=val
-            def pick(*terms):
-                for k,v in vals.items():
-                    if any(t in k for t in terms):return v
-                return None
-            return {"gf":s["gf"],"ga":s["ga"],
-                    "corners":pick("corner"),
-                    "shots":pick("total shots","shots"),
-                    "sot":pick("shots on target"),
-                    "cards":pick("yellow card"),
-                    "fouls":pick("foul")}
+def extract_team_row(s, team_name):
+    for b in s.get("stats", []) or []:
+        if b.get("team", {}).get("displayName") != team_name: continue
+        vals = {}
+        for x in b.get("statistics", []) or []:
+            label = (x.get("name") or x.get("displayName") or "").lower()
+            val = parse_num(x.get("displayValue", x.get("value")))
+            if val is not None: vals[label] = val
+        def pick(*terms):
+            for k, v in vals.items():
+                if any(t in k for t in terms): return v
+            return None
+        return {
+            "gf": s["gf"], "ga": s["ga"], "corners": pick("corner"),
+            "shots": pick("total shots", "shots"), "sot": pick("shots on target"),
+            "cards": pick("yellow card"), "fouls": pick("foul"),
+        }
     return None
 
-def past_team_events(league,team_id,limit=5):
-    # ESPN team schedules expose recent completed events without needing an API key.
-    try:d=get_json(f"{BASE}/{LEAGUES[league]}/teams/{team_id}/schedule")
-    except Exception:return []
-    ev=[]
-    for e in d.get("events",[]):
-        st=e.get("competitions",[{}])[0].get("status",{}).get("type",{}).get("completed")
-        if st: ev.append(e)
-    ev.sort(key=lambda x:x.get("date",""),reverse=True)
+def past_team_events(league, team_id, limit=5):
+    try: d = get_json(f"{BASE}/{LEAGUES[league]}/teams/{team_id}/schedule")
+    except Exception: return []
+    ev = []
+    for e in d.get("events", []):
+        if e.get("competitions", [{}])[0].get("status", {}).get("type", {}).get("completed"):
+            ev.append(e)
+    ev.sort(key=lambda x: x.get("date", ""), reverse=True)
     return ev[:limit]
 
-def row_for_event(e,league,team_id):
-    s=summary(e.get("id"),league)
-    if not s:return None
-    home_id=(e.get("competitions",[{}])[0].get("competitors",[{}])[0].get("team",{}).get("id"))
-    side_home=home_id==str(team_id)
-    team=s["home"] if side_home else s["away"]
-    opp=s["away"] if side_home else s["home"]
-    row=extract_team_row(s,team)
-    if not row:return None
-    # Match-level totals: aggregate both teams so cards/fouls are not double-counted as one side.
-    team_blocks=s.get("stats",[]) or []
-    all_cards=[];all_fouls=[]
-    for b in team_blocks:
-        vals={}
-        for x in b.get("statistics",[]) or []:
-            label=(x.get("name") or x.get("displayName") or "").lower()
-            val=parse_num(x.get("displayValue",x.get("value")))
-            if val is not None: vals[label]=val
-        for k,v in vals.items():
-            if "yellow card" in k: all_cards.append(v); break
-        for k,v in vals.items():
-            if "foul" in k: all_fouls.append(v); break
-    row["total_cards"]=sum(all_cards) if len(all_cards)==2 else None
-    row["total_fouls"]=sum(all_fouls) if len(all_fouls)==2 else None
-    row["opp"]=opp
-    row["venue"]="home" if side_home else "away"
-    row["player_rows"]=extract_player_rows({"boxscore":{"players":s.get("players",[])}},team)
+def row_for_event(e, league, team_id):
+    s = summary(e.get("id"), league)
+    if not s: return None
+    comps = e.get("competitions", [{}])[0].get("competitors", [])
+    home_id = comps[0].get("team", {}).get("id") if comps else None
+    side_home = str(home_id) == str(team_id)
+    team, opp = (s["home"], s["away"]) if side_home else (s["away"], s["home"])
+    row = extract_team_row(s, team)
+    if not row: return None
+    cards, fouls = [], []
+    for b in s.get("stats", []) or []:
+        vals = {}
+        for x in b.get("statistics", []) or []:
+            label = (x.get("name") or x.get("displayName") or "").lower()
+            val = parse_num(x.get("displayValue", x.get("value")))
+            if val is not None: vals[label] = val
+        for k, v in vals.items():
+            if "yellow card" in k: cards.append(v); break
+        for k, v in vals.items():
+            if "foul" in k: fouls.append(v); break
+    row["total_cards"] = sum(cards) if len(cards) == 2 else None
+    row["total_fouls"] = sum(fouls) if len(fouls) == 2 else None
+    row["opp"], row["venue"] = opp, ("home" if side_home else "away")
+    row["player_rows"] = extract_player_rows({"boxscore": {"players": s.get("players", [])}}, team)
     return row
 
-def team_rows(league,team_id):
-    rows=[]
-    for e in past_team_events(league,team_id,5):
-        r=row_for_event(e,league,team_id)
-        if r:rows.append(r)
-    return rows
+def team_rows(league, team_id):
+    return [r for e in past_team_events(league, team_id, 5) if (r := row_for_event(e, league, team_id))]
+
 def player_candidates(rows, team_name):
-    candidates=[]
+    by = {}
     for r in rows:
-        for p in r.get("player_rows",[]):
-            if p.get("team")!=team_name: continue
-            st=p.get("stats",{})
-            shots=next((v for k,v in st.items() if k in ("shots","total shots","totalshots")),None)
-            sot=next((v for k,v in st.items() if k in ("shots on target","shotsontarget","sot")),None)
-            fouls=next((v for k,v in st.items() if k in ("fouls","fouls committed","foulscommitted")),None)
-            if shots is not None or sot is not None or fouls is not None:
-                candidates.append((p.get("name"),shots,sot,fouls))
-    return candidates
+        for p in r.get("player_rows", []):
+            if p.get("team") != team_name: continue
+            st = p.get("stats", {})
+            shots = next((v for k,v in st.items() if k in ("shots","total shots","totalshots")), None)
+            sot = next((v for k,v in st.items() if k in ("shots on target","shotsontarget","sot")), None)
+            fouls = next((v for k,v in st.items() if k in ("fouls","fouls committed","foulscommitted")), None)
+            z = by.setdefault(p.get("name"), {"shots":[],"sot":[],"fouls":[]})
+            if shots is not None: z["shots"].append(shots)
+            if sot is not None: z["sot"].append(sot)
+            if fouls is not None: z["fouls"].append(fouls)
+    return by
 
-def signal(m,a,b):
-    rows=a+b
-    if len(rows)<6:return None
-    candidates=[]
-    # Goal markets: totals and BTTS from each recent match.
-    goals=[r["gf"]+r["ga"] for r in rows]
-    btts=[1 if r["gf"]>0 and r["ga"]>0 else 0 for r in rows]
-    btts_rate=sum(btts)/len(btts) if btts else 0
-    def hit_rate(vals,line):
-        return sum(1 for x in vals if x>line)/len(vals) if vals else 0
-    lam=statistics.mean(goals);p=poisson_over(lam,2.5);hr=hit_rate(goals,2.5)
-    if p>=.66 and hr>=.55:candidates.append((p,"Más de 2.5 goles",f"Media reciente: {lam:.2f}; se superó en {hr*100:.0f}% de la muestra."))
-    p15=poisson_over(lam,1.5);hr15=hit_rate(goals,1.5)
-    if p15>=.78 and hr15>=.70:candidates.append((p15,"Más de 1.5 goles",f"Media reciente: {lam:.2f}; se superó en {hr15*100:.0f}% de la muestra."))
-    p35=poisson_over(lam,3.5);hr35=hit_rate(goals,3.5)
-    if p35>=.60 and hr35>=.45:candidates.append((p35,"Más de 3.5 goles",f"Media reciente: {lam:.2f}; se superó en {hr35*100:.0f}% de la muestra."))
-    if btts_rate>=.62:candidates.append((btts_rate,"Ambos equipos marcan",f"BTTS en {btts_rate*100:.0f}% de los últimos {len(rows)} partidos medidos."))
-    corners=[r["corners"] for r in rows if r["corners"] is not None]
-    if len(corners)>=6:
-        lam=statistics.mean(corners)*2
-        p=poisson_over(lam,8.5)
-        hr=hit_rate(corners,8.5)
-        if p>=.66 and hr>=.55:candidates.append((p,"Más de 8.5 córners",f"Ritmo reciente estimado: {lam:.1f}; se superó en {hr*100:.0f}% de la muestra."))
-    shots=[r["shots"] for r in rows if r["shots"] is not None]
-    if len(shots)>=6:
-        lam=statistics.mean(shots)*2
-        p=poisson_over(lam,21.5)
-        hr=hit_rate(shots,21.5)
-        if p>=.66 and hr>=.55:candidates.append((p,"Más de 21.5 tiros",f"Ritmo reciente estimado: {lam:.1f}; se superó en {hr*100:.0f}% de la muestra."))
-    total_cards=[r["total_cards"] for r in rows if r.get("total_cards") is not None]
-    if len(total_cards)>=6:
-        lam=statistics.mean(total_cards);p=poisson_over(lam,4.5);hr=hit_rate(total_cards,4.5)
-        if p>=.66 and hr>=.55:candidates.append((p,"Más de 4.5 tarjetas",f"Media reciente: {lam:.2f}; se superó en {hr*100:.0f}% de la muestra."))
-    total_fouls=[r["total_fouls"] for r in rows if r.get("total_fouls") is not None]
-    if len(total_fouls)>=6:
-        lam=statistics.mean(total_fouls);p=poisson_over(lam,21.5);hr=hit_rate(total_fouls,21.5)
-        if p>=.66 and hr>=.55:candidates.append((p,"Más de 21.5 faltas",f"Media reciente: {lam:.1f}; se superó en {hr*100:.0f}% de la muestra."))
-    cards=[r["cards"] for r in rows if r["cards"] is not None]
-    if len(cards)>=6:
-        lam=statistics.mean(cards)
-        p=poisson_over(lam,3.5);hr=hit_rate(cards,3.5)
-        if p>=.66 and hr>=.55:candidates.append((p,"Más de 3.5 tarjetas",f"Media reciente: {lam:.2f} por equipo; se superó en {hr*100:.0f}% de la muestra."))
-    for name,rs in [(m["home"],a),(m["away"],b)]:
-        for key,line,label in [("corners",4.5,"córners"),("shots",9.5,"tiros")]:
-            vals=[r[key] for r in rs if r.get(key) is not None]
-            if len(vals)>=4:
-                lam=statistics.mean(vals);p=poisson_over(lam,line);hr=hit_rate(vals,line)
-                if p>=.68 and hr>=.65:candidates.append((p,f"{name} más de {line} {label}",f"{name} promedia {lam:.1f} en sus últimos {len(vals)} partidos; supera la línea en {hr*100:.0f}%."))
-        vals_sot=[r["sot"] for r in rs if r.get("sot") is not None]
-        if len(vals_sot)>=4:
-            lam=statistics.mean(vals_sot);line=3.5;p=poisson_over(lam,line);hr=hit_rate(vals_sot,line)
-            if p>=.68 and hr>=.65:candidates.append((p,f"{name} más de {line} tiros a puerta",f"{name} promedia {lam:.1f} tiros a puerta en {len(vals_sot)} partidos; supera la línea en {hr*100:.0f}%."))
-    # Player markets: only exact labeled statistics; unresolved fields are skipped.
-    for name,rs in [(m["home"],a),(m["away"],b)]:
-        pc=player_candidates(rs,name)
-        by={}
-        for pn,shots,sot,fouls in pc:
-            z=by.setdefault(pn,{"shots":[],"sot":[],"fouls":[]})
-            if shots is not None:z["shots"].append(shots)
-            if sot is not None:z["sot"].append(sot)
-            if fouls is not None:z["fouls"].append(fouls)
-        for pn,z in by.items():
-            for key,line,label in [("shots",1.5,"tiros"),("sot",0.5,"tiros a puerta"),("fouls",1.5,"faltas cometidas")]:
-                vals=z[key]
-                if len(vals)>=3:
-                    hr=hit_rate(vals,line);avg=statistics.mean(vals)
-                    if hr>=.67:
-                        candidates.append((hr,f"{pn} más de {line} {label}",f"{pn}: promedio {avg:.2f}; supera la línea en {hr*100:.0f}% de {len(vals)} partidos medidos."))
-    # Player markets are only emitted when ESPN exposes a consistent numeric player feed.
-    # We intentionally do not guess stat-column positions; unresolved player stats are skipped.
-    if not candidates:return None
-    p,market,why=max(candidates,key=lambda x:x[0])
-    return {"league":m["league"],"match":f'{m["home"]} vs {m["away"]}',"date":m["date"],"time":m["time"],
-            "market":market,"prob":round(p*100,1),"confidence":"ALTA" if p>=.75 else "MEDIA-ALTA" if p>=.70 else "MEDIA",
-            "why":why,"sample":len(rows),"generated_at":datetime.now(timezone.utc).isoformat()}
+def signals_365(match):
+    if not (fixture_rows and normalize_player_stats and find_match): return []
+    try:
+        today = datetime.now(timezone.utc).date()
+        start = (today - timedelta(days=75)).isoformat()
+        end = (today - timedelta(days=1)).isoformat()
+        hist = fixture_rows(match["league"], start, end, results=True)
+        hist = hist[-12:]
+        player_history = {}
+        for fx in hist:
+            if fx["home_norm"] not in (match["home"].lower(),) and fx["away_norm"] not in (match["away"].lower(),):
+                pass
+            for p in normalize_player_stats(fx["id"]):
+                name = p.get("name")
+                if not name: continue
+                player_history.setdefault(name, []).append(p)
+        upcoming_365 = find_match(match["league"], match["home"], match["away"], match["date"])
+        starters = set()
+        if upcoming_365:
+            for t in (lineups(upcoming_365["id"]).get("teams", []) if lineups else []):
+                for p in t.get("players", []):
+                    if p.get("starter"): starters.add(p.get("name"))
+        out = []
+        for name, hist_rows in player_history.items():
+            usable = [x for x in hist_rows if isinstance(x.get("minutes"), (int,float)) and x["minutes"] >= 60]
+            if len(usable) < 5: continue
+            for field, line, label in [
+                ("shots", 1.5, "tiros"), ("shots_on_target", 0.5, "tiros a puerta"),
+                ("fouls_committed", 1.5, "faltas cometidas")
+            ]:
+                vals = [x[field] for x in usable if isinstance(x.get(field), (int,float))]
+                if len(vals) < 5: continue
+                hr = hit_rate(vals, line)
+                if hr < .70: continue
+                if starters and name not in starters: continue
+                avg = statistics.mean(vals)
+                out.append({
+                    "market": f"{name} más de {line} {label}",
+                    "prob": round(hr*100, 1),
+                    "why": f"365Scores: {sum(v>line for v in vals)}/{len(vals)} supera la línea; media {avg:.2f}; muestra de {len(vals)} partidos con 60+ min.",
+                    "source": "365Scores",
+                })
+        return out
+    except Exception:
+        return []
 
-def upcoming(league,date):
-    try:d=get_json(f"{BASE}/{LEAGUES[league]}/scoreboard?dates={date.replace('-','')}")
-    except Exception:return []
-    out=[]
-    for e in d.get("events",[]):
-        c=(e.get("competitions") or [{}])[0]
-        teams=c.get("competitors",[])
-        if len(teams)!=2:continue
-        h=next((x for x in teams if x.get("homeAway")=="home"),teams[0])
-        a=next((x for x in teams if x.get("homeAway")=="away"),teams[-1])
-        if c.get("status",{}).get("type",{}).get("completed"):continue
-        if not h.get("team",{}).get("id") or not a.get("team",{}).get("id"):continue
-        dt=datetime.fromisoformat(e["date"].replace("Z","+00:00"))
-        out.append({"id":e["id"],"home":h["team"]["displayName"],"away":a["team"]["displayName"],
-                    "home_id":h["team"]["id"],"away_id":a["team"]["id"],"league":league,
-                    "date":dt.date().isoformat(),"time":dt.strftime("%H:%M UTC")})
+def signal(m, a, b):
+    rows = a + b
+    if len(rows) < 6: return None
+    candidates = []
+    goals = [r["gf"] + r["ga"] for r in rows]
+    lam = statistics.mean(goals)
+    for line, minp, minhr, label in [(1.5,.78,.70,"Más de 1.5 goles"),(2.5,.66,.55,"Más de 2.5 goles"),(3.5,.60,.45,"Más de 3.5 goles")]:
+        p, hr = poisson_over(lam, line), hit_rate(goals, line)
+        if p >= minp and hr >= minhr:
+            candidates.append((p, label, f"Media reciente {lam:.2f}; supera {line} en {hr*100:.0f}% de la muestra.", "ESPN"))
+    btts = sum(1 for r in rows if r["gf"] > 0 and r["ga"] > 0) / len(rows)
+    if btts >= .62: candidates.append((btts, "Ambos equipos marcan", f"BTTS en {btts*100:.0f}% de los últimos {len(rows)} partidos.", "ESPN"))
+    for field, line, label, threshold in [("corners",8.5,"Más de 8.5 córners",.66),("shots",21.5,"Más de 21.5 tiros",.66)]:
+        vals = [r[field] for r in rows if r.get(field) is not None]
+        if len(vals) >= 6:
+            lam2 = statistics.mean(vals) * 2
+            p, hr = poisson_over(lam2, line), hit_rate(vals, line)
+            if p >= threshold and hr >= .55:
+                candidates.append((p, label, f"Ritmo estimado {lam2:.1f}; supera la línea en {hr*100:.0f}%.", "ESPN"))
+    for field, line, label in [("total_cards",4.5,"Más de 4.5 tarjetas"),("total_fouls",21.5,"Más de 21.5 faltas")]:
+        vals = [r[field] for r in rows if r.get(field) is not None]
+        if len(vals) >= 6:
+            lam2 = statistics.mean(vals)
+            p, hr = poisson_over(lam2, line), hit_rate(vals, line)
+            if p >= .66 and hr >= .55:
+                candidates.append((p, label, f"Media reciente {lam2:.1f}; supera la línea en {hr*100:.0}%.", "ESPN"))
+    for name, rs in [(m["home"], a), (m["away"], b)]:
+        for field, line, label in [("corners",4.5,"córners"),("shots",9.5,"tiros"),("sot",3.5,"tiros a puerta")]:
+            vals = [r[field] for r in rs if r.get(field) is not None]
+            if len(vals) >= 4:
+                lam2 = statistics.mean(vals)
+                p, hr = poisson_over(lam2, line), hit_rate(vals, line)
+                if p >= .68 and hr >= .65:
+                    candidates.append((p, f"{name} más de {line} {label}", f"{name}: media {lam2:.1f}; supera la línea en {hr*100:.0f}% de {len(vals)}.", "ESPN"))
+    for player, z in player_candidates(a, m["home"]).items() | player_candidates(b, m["away"]).items():
+        for field, line, label in [("shots",1.5,"tiros"),("sot",.5,"tiros a puerta"),("fouls",1.5,"faltas cometidas")]:
+            vals = z[field]
+            if len(vals) >= 3:
+                hr = hit_rate(vals, line)
+                if hr >= .67:
+                    candidates.append((hr, f"{player} más de {line} {label}", f"{player}: {sum(v>line for v in vals)}/{len(vals)} partidos por encima.", "ESPN"))
+    p365 = signals_365(m)
+    for x in p365:
+        candidates.append((x["prob"]/100, x["market"], x["why"], x["source"]))
+    if not candidates: return None
+    p, market, why, source = max(candidates, key=lambda x:x[0])
+    return {
+        "league": m["league"], "match": f'{m["home"]} vs {m["away"]}',
+        "date": m["date"], "time": m["time"], "market": market,
+        "prob": round(p*100, 1),
+        "confidence": "ALTA" if p >= .75 else "MEDIA-ALTA" if p >= .70 else "MEDIA",
+        "why": why, "source": source, "sample": len(rows),
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+def upcoming(league, date):
+    try: d = get_json(f"{BASE}/{LEAGUES[league]}/scoreboard?dates={date.replace('-','')}")
+    except Exception: return []
+    out = []
+    for e in d.get("events", []):
+        c = (e.get("competitions") or [{}])[0]
+        teams = c.get("competitors", [])
+        if len(teams) != 2: continue
+        h = next((x for x in teams if x.get("homeAway") == "home"), teams[0])
+        a = next((x for x in teams if x.get("homeAway") == "away"), teams[-1])
+        if c.get("status", {}).get("type", {}).get("completed"): continue
+        if not h.get("team", {}).get("id") or not a.get("team", {}).get("id"): continue
+        dt = datetime.fromisoformat(e["date"].replace("Z","+00:00"))
+        out.append({
+            "id": e["id"], "home": h["team"]["displayName"], "away": a["team"]["displayName"],
+            "home_id": h["team"]["id"], "away_id": a["team"]["id"], "league": league,
+            "date": dt.date().isoformat(), "time": dt.strftime("%H:%M UTC")
+        })
     return out
 
-def enrich_player_signal_365(match):
-    # 365Scores IDs are not assumed to equal ESPN IDs. Mapping is added later.
-    return []
-\ndef main():
-    now=datetime.now(timezone.utc)
-    matches=[];seen=set()
+def main():
+    now = datetime.now(timezone.utc)
+    matches, seen = [], set()
     for i in range(10):
-        day=(now+timedelta(days=i)).date().isoformat()
+        day = (now + timedelta(days=i)).date().isoformat()
         for league in LEAGUES:
-            for m in upcoming(league,day):
-                if m["id"] not in seen:seen.add(m["id"]);matches.append(m)
-    signals=[];reviewed=0
-    for m in matches[:120]:
-        reviewed+=1
-        a=team_rows(m["league"],m["home_id"]);b=team_rows(m["league"],m["away_id"])
-        s=signal(m,a,b)
-        if s:signals.append(s)
+            for m in upcoming(league, day):
+                if m["id"] not in seen:
+                    seen.add(m["id"]); matches.append(m)
+    signals, reviewed = [], 0
+    for m in matches[:160]:
+        reviewed += 1
+        a, b = team_rows(m["league"], m["home_id"]), team_rows(m["league"], m["away_id"])
+        s = signal(m, a, b)
+        if s: signals.append(s)
     signals.sort(key=lambda x: x["prob"], reverse=True)
-    out={"updated_at":datetime.now(timezone.utc).isoformat(),"matches":signals,"reviewed":reviewed,
-         "markets":15,"competitions":len(set(m["league"] for m in matches)),
-         "source":"ESPN public soccer data + EdgeBet statistical model; 365Scores player layer prepared, match-ID mapping pending.",
-         "model":"Recent-match rate + hit-rate screen; match totals aggregate both teams; strongest market only."}
-    os.makedirs("data",exist_ok=True)
-    with open("data/radar.json","w",encoding="utf-8") as f:json.dump(out,f,ensure_ascii=False,indent=2)
-    print(json.dumps({"reviewed":reviewed,"signals":len(signals),"competitions":out["competitions"]}))
+    out = {
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "matches": signals, "reviewed": reviewed,
+        "markets": 18, "competitions": len(set(m["league"] for m in matches)),
+        "source": "ESPN public soccer data + optional 365Scores player enrichment",
+        "model": "Recent-match rates + Poisson screen + player hit-rate filter; strongest market per match.",
+    }
+    os.makedirs("data", exist_ok=True)
+    with open("data/radar.json", "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+    print(json.dumps({"reviewed": reviewed, "signals": len(signals), "competitions": out["competitions"]}))
 
-if __name__=="__main__":main()
+if __name__ == "__main__":
+    main()
