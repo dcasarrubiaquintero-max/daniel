@@ -110,6 +110,7 @@ def row_for_event(e,league,team_id):
     row=extract_team_row(s,team)
     if not row:return None
     row["opp"]=opp
+    row["venue"]="home" if side_home else "away"
     return row
 
 def team_rows(league,team_id):
@@ -124,29 +125,41 @@ def signal(m,a,b):
     if len(rows)<6:return None
     candidates=[]
     goals=[r["gf"]+r["ga"] for r in rows]
-    lam=statistics.mean(goals);p=poisson_over(lam,2.5)
-    if p>=.66:candidates.append((p,"Más de 2.5 goles",f"Media reciente: {lam:.2f} goles."))
+    def hit_rate(vals,line):
+        return sum(1 for x in vals if x>line)/len(vals) if vals else 0
+    lam=statistics.mean(goals);p=poisson_over(lam,2.5);hr=hit_rate(goals,2.5)
+    if p>=.66 and hr>=.55:candidates.append((p,"Más de 2.5 goles",f"Media reciente: {lam:.2f}; se superó en {hr*100:.0f}% de la muestra."))
+    p15=poisson_over(lam,1.5);hr15=hit_rate(goals,1.5)
+    if p15>=.78 and hr15>=.70:candidates.append((p15,"Más de 1.5 goles",f"Media reciente: {lam:.2f}; se superó en {hr15*100:.0f}% de la muestra."))
+    p35=poisson_over(lam,3.5);hr35=hit_rate(goals,3.5)
+    if p35>=.60 and hr35>=.45:candidates.append((p35,"Más de 3.5 goles",f"Media reciente: {lam:.2f}; se superó en {hr35*100:.0f}% de la muestra."))
     corners=[r["corners"] for r in rows if r["corners"] is not None]
     if len(corners)>=6:
         lam=statistics.mean(corners)*2
         p=poisson_over(lam,8.5)
-        if p>=.66:candidates.append((p,"Más de 8.5 córners",f"Ritmo reciente estimado: {lam:.1f} córners."))
+        hr=hit_rate(corners,8.5)
+        if p>=.66 and hr>=.55:candidates.append((p,"Más de 8.5 córners",f"Ritmo reciente estimado: {lam:.1f}; se superó en {hr*100:.0f}% de la muestra."))
     shots=[r["shots"] for r in rows if r["shots"] is not None]
     if len(shots)>=6:
         lam=statistics.mean(shots)*2
         p=poisson_over(lam,21.5)
-        if p>=.66:candidates.append((p,"Más de 21.5 tiros",f"Ritmo reciente estimado: {lam:.1f} tiros."))
+        hr=hit_rate(shots,21.5)
+        if p>=.66 and hr>=.55:candidates.append((p,"Más de 21.5 tiros",f"Ritmo reciente estimado: {lam:.1f}; se superó en {hr*100:.0f}% de la muestra."))
     cards=[r["cards"] for r in rows if r["cards"] is not None]
     if len(cards)>=6:
         lam=statistics.mean(cards)
-        p=poisson_over(lam,3.5)
-        if p>=.66:candidates.append((p,"Más de 3.5 tarjetas",f"Media reciente: {lam:.2f} tarjetas por equipo observado."))
+        p=poisson_over(lam,3.5);hr=hit_rate(cards,3.5)
+        if p>=.66 and hr>=.55:candidates.append((p,"Más de 3.5 tarjetas",f"Media reciente: {lam:.2f} por equipo; se superó en {hr*100:.0f}% de la muestra."))
     for name,rs in [(m["home"],a),(m["away"],b)]:
         for key,line,label in [("corners",4.5,"córners"),("shots",9.5,"tiros")]:
             vals=[r[key] for r in rs if r.get(key) is not None]
             if len(vals)>=4:
-                lam=statistics.mean(vals);p=poisson_over(lam,line)
-                if p>=.68:candidates.append((p,f"{name} más de {line} {label}",f"{name} promedia {lam:.1f} en sus últimos {len(vals)} partidos medidos."))
+                lam=statistics.mean(vals);p=poisson_over(lam,line);hr=hit_rate(vals,line)
+                if p>=.68 and hr>=.65:candidates.append((p,f"{name} más de {line} {label}",f"{name} promedia {lam:.1f} en sus últimos {len(vals)} partidos; supera la línea en {hr*100:.0f}%."))
+        vals_sot=[r["sot"] for r in rs if r.get("sot") is not None]
+        if len(vals_sot)>=4:
+            lam=statistics.mean(vals_sot);line=3.5;p=poisson_over(lam,line);hr=hit_rate(vals_sot,line)
+            if p>=.68 and hr>=.65:candidates.append((p,f"{name} más de {line} tiros a puerta",f"{name} promedia {lam:.1f} tiros a puerta en {len(vals_sot)} partidos; supera la línea en {hr*100:.0f}%."))
     if not candidates:return None
     p,market,why=max(candidates,key=lambda x:x[0])
     return {"league":m["league"],"match":f'{m["home"]} vs {m["away"]}',"date":m["date"],"time":m["time"],
@@ -174,21 +187,22 @@ def upcoming(league,date):
 def main():
     now=datetime.now(timezone.utc)
     matches=[];seen=set()
-    for i in range(8):
+    for i in range(10):
         day=(now+timedelta(days=i)).date().isoformat()
         for league in LEAGUES:
             for m in upcoming(league,day):
                 if m["id"] not in seen:seen.add(m["id"]);matches.append(m)
     signals=[];reviewed=0
-    for m in matches[:40]:
+    for m in matches[:120]:
         reviewed+=1
         a=team_rows(m["league"],m["home_id"]);b=team_rows(m["league"],m["away_id"])
         s=signal(m,a,b)
         if s:signals.append(s)
+    signals.sort(key=lambda x: x["prob"], reverse=True)
     out={"updated_at":datetime.now(timezone.utc).isoformat(),"matches":signals,"reviewed":reviewed,
-         "markets":6,"competitions":len(set(m["league"] for m in matches)),
+         "markets":10,"competitions":len(set(m["league"] for m in matches)),
          "source":"ESPN public soccer scoreboard/summaries; EdgeBet statistical model",
-         "model":"Recent-match rate screen with minimum coverage and probability thresholds."}
+         "model":"Recent-match rate + hit-rate screen with minimum coverage; strongest market only."}
     os.makedirs("data",exist_ok=True)
     with open("data/radar.json","w",encoding="utf-8") as f:json.dump(out,f,ensure_ascii=False,indent=2)
     print(json.dumps({"reviewed":reviewed,"signals":len(signals),"competitions":out["competitions"]}))
