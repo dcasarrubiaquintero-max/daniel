@@ -323,12 +323,16 @@ def signal(m, a, b):
                     "why":"No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.","source":"Radar","sample":len(rows),
                     "generated_at":datetime.now(timezone.utc).isoformat()}
     else:
-        player_candidates_scored = [x for x in candidates if (" tiros" in x[1] or "tiros a puerta" in x[1] or "faltas cometidas" in x[1]) and not x[1].startswith("Más de ")]
-        strong_players = [x for x in player_candidates_scored if x[0] >= .67]
-        if strong_players:
-            p, market, why, source = max(strong_players, key=lambda x:x[0])
+        ov = PLAYER_OVERRIDES.get((m["home"], m["away"], m["date"]))
+        if ov:
+            p, market, why, source = ov
         else:
-            p, market, why, source = max(candidates, key=lambda x:x[0])
+            player_candidates_scored = [x for x in candidates if (" tiros" in x[1] or "tiros a puerta" in x[1] or "faltas cometidas" in x[1]) and not x[1].startswith("Más de ")]
+            strong_players = [x for x in player_candidates_scored if x[0] >= .67]
+            if strong_players:
+                p, market, why, source = max(strong_players, key=lambda x:x[0])
+            else:
+                p, market, why, source = max(candidates, key=lambda x:x[0])
     return {
         "league": m["league"], "match": f'{m["home"]} vs {m["away"]}',
         "date": m["date"], "time": m["time"], "market": market,
