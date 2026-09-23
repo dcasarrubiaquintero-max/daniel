@@ -159,15 +159,18 @@ def signals_365(match):
         today = datetime.now(timezone.utc).date()
         start = (today - timedelta(days=75)).isoformat()
         end = (today - timedelta(days=1)).isoformat()
+        target_home, target_away = norm(match["home"]), norm(match["away"])
         hist = fixture_rows(match["league"], start, end, results=True)
-        hist = hist[-12:]
+        relevant = [fx for fx in hist if fx["home_norm"] in (target_home, target_away) or fx["away_norm"] in (target_home, target_away)]
+        relevant = relevant[-10:]
         player_history = {}
-        for fx in hist:
-            if fx["home_norm"] not in (match["home"].lower(),) and fx["away_norm"] not in (match["away"].lower(),):
-                pass
+        for fx in relevant:
+            target_teams = set()
+            if fx["home_norm"] in (target_home, target_away): target_teams.add(fx["home_norm"])
+            if fx["away_norm"] in (target_home, target_away): target_teams.add(fx["away_norm"])
             for p in normalize_player_stats(fx["id"]):
                 name = p.get("name")
-                if not name: continue
+                if not name or norm(p.get("team")) not in target_teams: continue
                 player_history.setdefault(name, []).append(p)
         upcoming_365 = find_match(match["league"], match["home"], match["away"], match["date"])
         starters = set()
@@ -233,7 +236,9 @@ def signal(m, a, b):
                 p, hr = poisson_over(lam2, line), hit_rate(vals, line)
                 if p >= .68 and hr >= .65:
                     candidates.append((p, f"{name} más de {line} {label}", f"{name}: media {lam2:.1f}; supera la línea en {hr*100:.0f}% de {len(vals)}.", "ESPN"))
-    for player, z in player_candidates(a, m["home"]).items() | player_candidates(b, m["away"]).items():
+    pc = player_candidates(a, m["home"])
+    pc.update(player_candidates(b, m["away"]))
+    for player, z in pc.items():
         for field, line, label in [("shots",1.5,"tiros"),("sot",.5,"tiros a puerta"),("fouls",1.5,"faltas cometidas")]:
             vals = z[field]
             if len(vals) >= 3:
