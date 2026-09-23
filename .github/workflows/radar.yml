@@ -13,6 +13,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: edgebet-radar
+  cancel-in-progress: true
+
 jobs:
   radar:
     runs-on: ubuntu-latest
@@ -33,7 +37,11 @@ jobs:
         run: |
           git config user.name "EdgeBet AI"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp data/radar.json /tmp/radar.json
+          git fetch origin main
+          git reset --hard origin/main
+          cp /tmp/radar.json data/radar.json
           git add data/radar.json
           git diff --cached --quiet && exit 0
           git commit -m "Update EdgeBet radar"
-          git push
+          git push origin HEAD:main
