@@ -15,6 +15,7 @@ LEAGUES = {
     "Europa League":"uefa.europa", "Nations League":"uefa.nations", "Amistosos":"fifa.friendly",
 }
 UA = "EdgeBet-AI/3.1"
+_365_match_budget = 50
 
 def get_json(url):
     req = Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
@@ -242,7 +243,9 @@ def signal(m, a, b):
                 hr = hit_rate(vals, line)
                 if hr >= .67:
                     candidates.append((hr, f"{player} más de {line} {label}", f"{player}: {sum(v>line for v in vals)}/{len(vals)} partidos por encima.", "ESPN"))
-    p365 = []
+    global _365_match_budget
+    p365 = signals_365(m) if _365_match_budget > 0 else []
+    if p365: _365_match_budget -= 1
     for x in p365:
         candidates.append((x["prob"]/100, x["market"], x["why"], x["source"]))
     if not candidates:
