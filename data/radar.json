@@ -1,9 +1,9 @@
 {
-  "updated_at": null,
+  "updated_at": "2026-09-23T14:55:54.309042+00:00",
   "matches": [],
   "reviewed": 0,
   "markets": 6,
   "competitions": 0,
-  "source": "EdgeBet AI",
-  "model": "Esperando primera ejecución automática."
+  "source": "SofaScore public football endpoints; fixtures/statistics cross-checked by EdgeBet model",
+  "model": "Recent-rate Poisson screen; signals require minimum sample coverage and probability threshold."
 }
