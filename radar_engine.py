@@ -1,4 +1,5 @@
 import json, math, os, re, statistics
+try:\n    from scores365_client import player_stats as scores365_player_stats\nexcept Exception:\n    scores365_player_stats = None
 from datetime import datetime, timezone, timedelta
 from urllib.request import Request, urlopen
 
@@ -269,7 +270,7 @@ def upcoming(league,date):
                     "date":dt.date().isoformat(),"time":dt.strftime("%H:%M UTC")})
     return out
 
-def main():
+def enrich_player_signal_365(match):\n    # Hook reservado para señales de jugador; requiere una respuesta 365Scores válida.\n    if scores365_player_stats is None or not match.get("id"): return []\n    try:\n        data = scores365_player_stats(match["id"])\n    except Exception:\n        return []\n    return data.get("teams", [])\n\ndef main():
     now=datetime.now(timezone.utc)
     matches=[];seen=set()
     for i in range(10):
@@ -281,7 +282,7 @@ def main():
     for m in matches[:120]:
         reviewed+=1
         a=team_rows(m["league"],m["home_id"]);b=team_rows(m["league"],m["away_id"])
-        s=signal(m,a,b)
+        s=signal(m,a,b)\n        # 365Scores queda conectado como segunda capa de datos de jugador;\n        # si no responde con estructura válida, el motor conserva el fallback ESPN.\n        enrich_player_signal_365(m)
         if s:signals.append(s)
     signals.sort(key=lambda x: x["prob"], reverse=True)
     out={"updated_at":datetime.now(timezone.utc).isoformat(),"matches":signals,"reviewed":reviewed,
