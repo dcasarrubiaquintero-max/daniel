@@ -259,11 +259,18 @@ def signal(m, a, b):
         "generated_at": datetime.now(timezone.utc).isoformat(),
     }
 
-def upcoming(league, date):
-    try: d = get_json(f"{BASE}/{LEAGUES[league]}/scoreboard?dates={date.replace('-','')}")
-    except Exception: return []
+def classify_all_event(e):
+    s = (((e.get("season") or {}).get("slug") or "") + " " + ((e.get("season") or {}).get("displayName") or "")).lower()
+    for name in ["Premier League","LaLiga","Serie A","Bundesliga","Ligue 1","Champions League","Europa League","Nations League"]:
+        if name.lower() in s:
+            return name
+    if "friendly" in s or "amistoso" in s:
+        return "Amistosos"
+    return None
+
+def parse_upcoming_events(data, league):
     out = []
-    for e in d.get("events", []):
+    for e in data.get("events", []):
         c = (e.get("competitions") or [{}])[0]
         teams = c.get("competitors", [])
         if len(teams) != 2: continue
@@ -271,13 +278,23 @@ def upcoming(league, date):
         a = next((x for x in teams if x.get("homeAway") == "away"), teams[-1])
         if c.get("status", {}).get("type", {}).get("completed"): continue
         if not h.get("team", {}).get("id") or not a.get("team", {}).get("id"): continue
-        dt = datetime.fromisoformat(e["date"].replace("Z","+00:00"))
-        out.append({
-            "id": e["id"], "home": h["team"]["displayName"], "away": a["team"]["displayName"],
-            "home_id": h["team"]["id"], "away_id": a["team"]["id"], "league": league,
-            "date": dt.date().isoformat(), "time": dt.strftime("%H:%M UTC")
-        })
+        try: dt = datetime.fromisoformat(e["date"].replace("Z","+00:00"))
+        except Exception: continue
+        out.append({"id": e["id"], "home": h["team"]["displayName"], "away": a["team"]["displayName"],
+                    "home_id": h["team"]["id"], "away_id": a["team"]["id"], "league": league,
+                    "date": dt.date().isoformat(), "time": dt.strftime("%H:%M UTC")})
     return out
+
+def upcoming(league, date):
+    try:
+        d = get_json(f"{BASE}/{LEAGUES[league]}/scoreboard?dates={date.replace('-', '')}")
+        rows = parse_upcoming_events(d, league)
+        if rows: return rows
+        all_d = get_json(f"{BASE}/all/scoreboard?dates={date.replace('-', '')}")
+        return [r for e in all_d.get("events", []) if classify_all_event(e) == league
+                for r in parse_upcoming_events({"events":[e]}, league)]
+    except Exception:
+        return []
 
 def main():
     now = datetime.now(timezone.utc)
