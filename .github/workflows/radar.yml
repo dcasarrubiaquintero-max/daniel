@@ -1,6 +1,10 @@
 name: EdgeBet AI Radar
 
 on:
+  push:
+    paths:
+      - "radar_engine.py"
+      - ".github/workflows/radar.yml"
   workflow_dispatch:
   schedule:
     - cron: "*/15 * * * *"
