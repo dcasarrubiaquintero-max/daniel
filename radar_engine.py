@@ -203,15 +203,22 @@ def slugify_team(name):
     s = unicodedata.normalize("NFKD", str(name or "")).encode("ascii","ignore").decode().lower()
     return re.sub(r"[^a-z0-9]+","-",s).strip("-")
 
+_STATZ_CACHE = {}
+
 def statz_player_pick(home, away):
     for team, opp in [(home,away),(away,home)]:
         try:
-            url = f"https://statz.ai/team/{slugify_team(team)}"
-            req = Request(url, headers={"User-Agent":"Mozilla/5.0 EdgeBet-AI/3.1","Accept":"text/html"})
-            with urlopen(req, timeout=8) as r:
-                html = r.read().decode("utf-8","ignore")
-            text = re.sub(r"<[^>]+>"," ",html)
-            text = re.sub(r"\s+"," ",text)
+            slug = slugify_team(team)
+            if slug in _STATZ_CACHE:
+                text = _STATZ_CACHE[slug]
+            else:
+                url = f"https://statz.ai/team/{slug}"
+                req = Request(url, headers={"User-Agent":"Mozilla/5.0 EdgeBet-AI/3.1","Accept":"text/html"})
+                with urlopen(req, timeout=6) as r:
+                    html = r.read().decode("utf-8","ignore")
+                text = re.sub(r"<[^>]+>"," ",html)
+                text = re.sub(r"\s+"," ",text)
+                _STATZ_CACHE[slug] = text
             pos = text.lower().find(f"{team} best bet builder picks vs {opp}".lower())
             if pos < 0: continue
             section = text[pos:pos+1800]
