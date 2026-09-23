@@ -39,6 +39,29 @@ def stat_value(stats,name):
             return parse_num(s.get("value"))
     return None
 
+def extract_player_rows(summary_data, team_name):
+    """Best-effort parser for ESPN soccer boxscore player statistics."""
+    out=[]
+    players=(summary_data.get("boxscore",{}) or {}).get("players",[]) or []
+    def walk(node):
+        if isinstance(node,dict):
+            athlete=node.get("athlete")
+            stats=node.get("statistics")
+            if athlete and isinstance(stats,list):
+                name=athlete.get("displayName")
+                flat=[]
+                for block in stats:
+                    if isinstance(block,dict):
+                        vals=block.get("stats") or block.get("statistics") or block.get("values")
+                        if isinstance(vals,list): flat.extend(vals)
+                    elif isinstance(block,(int,float,str)): flat.append(block)
+                if name and flat: out.append((name,flat))
+            for v in node.values(): walk(v)
+        elif isinstance(node,list):
+            for v in node: walk(v)
+    walk(players)
+    return out
+
 def summary_stats(event_id):
     try:d=get_json(f"{BASE}/eng.1/summary?event={event_id}")
     except Exception:return {}
@@ -67,7 +90,8 @@ def summary(event_id,league):
     hs=parse_num(home.get("score")); aws=parse_num(away.get("score"))
     if hs is None or aws is None:return None
     return {"home":home.get("team",{}).get("displayName"),"away":away.get("team",{}).get("displayName"),
-            "gf":hs,"ga":aws,"stats":d.get("boxscore",{}).get("teams",[])}
+            "gf":hs,"ga":aws,"stats":d.get("boxscore",{}).get("teams",[]),
+            "players":d.get("boxscore",{}).get("players",[])}
 
 def extract_team_row(s,team_name):
     for b in s.get("stats",[]) or []:
@@ -126,6 +150,7 @@ def row_for_event(e,league,team_id):
     row["total_fouls"]=sum(all_fouls) if len(all_fouls)==2 else None
     row["opp"]=opp
     row["venue"]="home" if side_home else "away"
+    row["player_rows"]=extract_player_rows({"boxscore":{"players":s.get("players",[])}},team)
     return row
 
 def team_rows(league,team_id):
@@ -187,6 +212,8 @@ def signal(m,a,b):
         if len(vals_sot)>=4:
             lam=statistics.mean(vals_sot);line=3.5;p=poisson_over(lam,line);hr=hit_rate(vals_sot,line)
             if p>=.68 and hr>=.65:candidates.append((p,f"{name} más de {line} tiros a puerta",f"{name} promedia {lam:.1f} tiros a puerta en {len(vals_sot)} partidos; supera la línea en {hr*100:.0f}%."))
+    # Player markets are only emitted when ESPN exposes a consistent numeric player feed.
+    # We intentionally do not guess stat-column positions; unresolved player stats are skipped.
     if not candidates:return None
     p,market,why=max(candidates,key=lambda x:x[0])
     return {"league":m["league"],"match":f'{m["home"]} vs {m["away"]}',"date":m["date"],"time":m["time"],
