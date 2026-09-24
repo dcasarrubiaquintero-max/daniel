@@ -253,168 +253,64 @@ def statz_player_pick(home, away):
 
 def signal(m, a, b):
     rows = a + b
-    statz_pick = statz_player_pick(m["home"], m["away"])
-    if len(rows) < 3:
-        ov = PLAYER_OVERRIDES.get((m["home"], m["away"], m["date"]))
-        if ov or statz_pick:
-            return {"league":m["league"],"match":f'{m["home"]} vs {m["away"]}',"date":m["date"],"time":m["time"],
-                    "market":(ov[0] if ov else statz_pick["market"]),"prob":round((ov[1] if ov else statz_pick["prob"])*100,1),"confidence":"ALTA","why":(ov[2] if ov else statz_pick["why"]),
-                    "source":( "Statz" if ov else statz_pick["source"]),"sample":len(rows),"generated_at":datetime.now(timezone.utc).isoformat()}
+    if len(a) < 4 or len(b) < 4:
         return {"league":m["league"],"match":f'{m["home"]} vs {m["away"]}',"date":m["date"],"time":m["time"],
                 "market":"SIN SEÑAL — datos insuficientes","prob":0,"confidence":"DATOS INSUFICIENTES",
-                "why":"No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.",
+                "why":"Se requieren al menos 4 partidos recientes por equipo para evaluar goles, BTTS y córners sin forzar una recomendación.",
                 "source":"Radar","sample":len(rows),"generated_at":datetime.now(timezone.utc).isoformat()}
+
     candidates = []
-    ov = PLAYER_OVERRIDES.get((m["home"], m["away"], m["date"]))
-    if ov:
-        candidates.append((ov[1], ov[0], ov[2], "Statz"))
-    if statz_pick:
-        candidates.append((statz_pick["prob"], statz_pick["market"], statz_pick["why"], statz_pick["source"]))
+
+    # 1) Más de 1.5 goles: prioridad principal cuando ambos equipos muestran consistencia.
     goals = [r["gf"] + r["ga"] for r in rows]
-    lam = statistics.mean(goals)
-    for line, minp, minhr, label in [(1.5,.78,.70,"Más de 1.5 goles"),(2.5,.66,.55,"Más de 2.5 goles"),(3.5,.60,.45,"Más de 3.5 goles")]:
-        p, hr = poisson_over(lam, line), hit_rate(goals, line)
-        if p >= minp and hr >= minhr:
-            candidates.append((p, label, f"Media reciente {lam:.2f}; supera {line} en {hr*100:.0f}% de la muestra.", "ESPN"))
-    btts = sum(1 for r in rows if r["gf"] > 0 and r["ga"] > 0) / len(rows)
-    if btts >= .62: candidates.append((btts, "Ambos equipos marcan", f"BTTS en {btts*100:.0f}% de los últimos {len(rows)} partidos.", "ESPN"))
-    for field, line, label, threshold in [("corners",8.5,"Más de 8.5 córners",.66),("shots",21.5,"Más de 21.5 tiros",.66)]:
-        vals = [r[field] for r in rows if r.get(field) is not None]
-        if len(vals) >= 6:
-            lam2 = statistics.mean(vals) * 2
-            p, hr = poisson_over(lam2, line), hit_rate(vals, line)
-            if p >= threshold and hr >= .55:
-                candidates.append((p, label, f"Ritmo estimado {lam2:.1f}; supera la línea en {hr*100:.0f}%.", "ESPN"))
-    for field, line, label in [("total_cards",4.5,"Más de 4.5 tarjetas"),("total_fouls",21.5,"Más de 21.5 faltas")]:
-        vals = [r[field] for r in rows if r.get(field) is not None]
-        if len(vals) >= 6:
-            lam2 = statistics.mean(vals)
-            p, hr = poisson_over(lam2, line), hit_rate(vals, line)
-            if p >= .66 and hr >= .55:
-                candidates.append((p, label, f"Media reciente {lam2:.1f}; supera la línea en {hr*100:.0}%.", "ESPN"))
+    hr15 = hit_rate(goals, 1.5)
+    lam15 = statistics.mean(goals) if goals else 0
+    if len(goals) >= 8 and hr15 >= 0.70:
+        p = min(0.96, max(0.55, 0.55*hr15 + 0.45*poisson_over(lam15, 1.5)))
+        candidates.append((p, "Más de 1.5 goles",
+            f"Se superó 1.5 goles en {sum(v>1.5 for v in goals)}/{len(goals)} partidos; media {lam15:.2f}.", "ESPN"))
+
+    # 2) Ambos marcan: exige evidencia de ambos lados, no solo muchos goles.
+    btts_home = sum(1 for r in a if r["gf"] > 0 and r["ga"] > 0) / len(a)
+    btts_away = sum(1 for r in b if r["gf"] > 0 and r["ga"] > 0) / len(b)
+    btts = (btts_home + btts_away) / 2
+    if btts >= 0.62:
+        candidates.append((btts, "Ambos equipos marcan",
+            f"BTTS en {btts_home*100:.0f}% de los últimos {len(a)} del {m['home']} y {btts_away*100:.0f}% de los últimos {len(b)} del {m['away']}.", "ESPN"))
+
+    # 3) Córners totales: solo si la muestra y la consistencia respaldan la línea.
+    corners = [r["corners"] for r in rows if r.get("corners") is not None]
+    if len(corners) >= 8:
+        for line, minimum in [(7.5,0.68),(8.5,0.64),(9.5,0.60),(10.5,0.56)]:
+            hr = hit_rate(corners, line)
+            lam = statistics.mean(corners)
+            p = 0.50*hr + 0.50*poisson_over(lam, line)
+            if hr >= minimum and p >= 0.62:
+                candidates.append((p, f"Más de {line} córners",
+                    f"Se superó la línea en {sum(v>line for v in corners)}/{len(corners)} partidos; media {lam:.1f} córners.", "ESPN"))
+
+    # 4) Córners por equipo: mercado individual de córners, sin usar tiros de jugadores.
     for name, rs in [(m["home"], a), (m["away"], b)]:
-        for field, line, label in [("corners",4.5,"córners"),("shots",9.5,"tiros"),("sot",3.5,"tiros a puerta")]:
-            vals = [r[field] for r in rs if r.get(field) is not None]
-            if len(vals) >= 4:
-                lam2 = statistics.mean(vals)
-                p, hr = poisson_over(lam2, line), hit_rate(vals, line)
-                if p >= .68 and hr >= .65:
-                    candidates.append((p, f"{name} más de {line} {label}", f"{name}: media {lam2:.1f}; supera la línea en {hr*100:.0f}% de {len(vals)}.", "ESPN"))
-    pc = player_candidates(a, m["home"])
-    pc.update(player_candidates(b, m["away"]))
-    for player, z in pc.items():
-        for field, line, label in [("shots",1.5,"tiros"),("sot",.5,"tiros a puerta"),("fouls",1.5,"faltas cometidas")]:
-            vals = z[field]
-            if len(vals) >= 3:
+        vals = [r["corners"] for r in rs if r.get("corners") is not None]
+        if len(vals) >= 4:
+            for line, minimum in [(3.5,0.70),(4.5,0.64),(5.5,0.58)]:
                 hr = hit_rate(vals, line)
-                if hr >= .67:
-                    candidates.append((hr, f"{player} más de {line} {label}", f"{player}: {sum(v>line for v in vals)}/{len(vals)} partidos por encima.", "ESPN"))
-    global _365_match_budget
+                lam = statistics.mean(vals)
+                p = 0.50*hr + 0.50*poisson_over(lam, line)
+                if hr >= minimum and p >= 0.62:
+                    candidates.append((p, f"{name} más de {line} córners",
+                        f"{name}: supera la línea en {sum(v>line for v in vals)}/{len(vals)} partidos; media {lam:.1f} córners.", "ESPN"))
 
     if not candidates:
-        fallback = []
-        if goals:
-            fallback.append((hit_rate(goals, 1.5), "Más de 1.5 goles", f"Histórico reciente: {sum(v>1.5 for v in goals)}/{len(goals)} supera 1.5.", "ESPN"))
-        for field, line, label in [("corners",8.5,"Más de 8.5 córners"),("shots",21.5,"Más de 21.5 tiros")]:
-            vals = [r[field] for r in rows if r.get(field) is not None]
-            if vals: fallback.append((hit_rate(vals, line), label, f"Histórico reciente: {sum(v>line for v in vals)}/{len(vals)} supera la línea.", "ESPN"))
-        for player, z in pc.items():
-            for field, line, label in [("shots",1.5,"tiros"),("sot",.5,"tiros a puerta"),("fouls",1.5,"faltas cometidas")]:
-                vals = z[field]
-                if len(vals) >= 3:
-                    fallback.append((hit_rate(vals, line), f"{player} más de {line} {label}", f"{player}: {sum(v>line for v in vals)}/{len(vals)} partidos por encima.", "ESPN"))
-        if fallback:
-            p, market, why, source = max(fallback, key=lambda x:x[0])
-        else:
-            return {"league":m["league"],"match":f'{m["home"]} vs {m["away"]}',"date":m["date"],"time":m["time"],
-                    "market":"SIN SEÑAL — datos insuficientes","prob":0,"confidence":"DATOS INSUFICIENTES",
-                    "why":"No hubo muestra suficiente para recomendar un mercado sin inventar estadísticas.","source":"Radar","sample":len(rows),
-                    "generated_at":datetime.now(timezone.utc).isoformat()}
-    else:
-        ov = PLAYER_OVERRIDES.get((m["home"], m["away"], m["date"]))
-        if ov:
-            market, p, why = ov
-            source = "Statz"
-        else:
-            player_candidates_scored = [x for x in candidates if (" tiros" in x[1] or "tiros a puerta" in x[1] or "faltas cometidas" in x[1]) and not x[1].startswith("Más de ")]
-            strong_players = [x for x in player_candidates_scored if x[0] >= .67]
-            if strong_players:
-                p, market, why, source = max(strong_players, key=lambda x:x[0])
-            else:
-                p, market, why, source = max(candidates, key=lambda x:x[0])
-    return {
-        "league": m["league"], "match": f'{m["home"]} vs {m["away"]}',
-        "date": m["date"], "time": m["time"], "market": market,
-        "prob": round(p*100, 1),
-        "confidence": "ALTA" if p >= .75 else "MEDIA-ALTA" if p >= .70 else "MEDIA",
-        "why": why, "source": source, "sample": len(rows),
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-    }
+        return {"league":m["league"],"match":f'{m["home"]} vs {m["away"]}',"date":m["date"],"time":m["time"],
+                "market":"SIN SEÑAL","prob":0,"confidence":"SIN SEÑAL",
+                "why":"Los datos recientes no superan el filtro mínimo para goles, ambos marcan o córners. No se fuerza una apuesta.",
+                "source":"Radar","sample":len(rows),"generated_at":datetime.now(timezone.utc).isoformat()}
 
-def classify_all_event(e):
-    s = (((e.get("season") or {}).get("slug") or "") + " " + ((e.get("season") or {}).get("displayName") or "")).lower()
-    for name in ["Premier League","LaLiga","Serie A","Bundesliga","Ligue 1","Champions League","Europa League","Nations League"]:
-        if name.lower() in s:
-            return name
-    if "friendly" in s or "amistoso" in s:
-        return "Amistosos"
-    return None
+    # Prioridad: BTTS y goles si tienen evidencia claramente superior; después córners.
+    p, market, why, source = max(candidates, key=lambda x:x[0])
+    return {"league":m["league"],"match":f'{m["home"]} vs {m["away"]}',"date":m["date"],"time":m["time"],
+            "market":market,"prob":round(p*100,1),
+            "confidence":"ALTA" if p >= .75 else "MEDIA-ALTA" if p >= .68 else "MEDIA",
+            "why":why,"source":source,"sample":len(rows),"generated_at":datetime.now(timezone.utc).isoformat()}
 
-def parse_upcoming_events(data, league):
-    out = []
-    for e in data.get("events", []):
-        c = (e.get("competitions") or [{}])[0]
-        teams = c.get("competitors", [])
-        if len(teams) != 2: continue
-        h = next((x for x in teams if x.get("homeAway") == "home"), teams[0])
-        a = next((x for x in teams if x.get("homeAway") == "away"), teams[-1])
-        if c.get("status", {}).get("type", {}).get("completed"): continue
-        if not h.get("team", {}).get("id") or not a.get("team", {}).get("id"): continue
-        try: dt = datetime.fromisoformat(e["date"].replace("Z","+00:00")).astimezone(ZoneInfo("America/Bogota"))
-        except Exception: continue
-        out.append({"id": e["id"], "home": h["team"]["displayName"], "away": a["team"]["displayName"],
-                    "home_id": h["team"]["id"], "away_id": a["team"]["id"], "league": league,
-                    "date": dt.strftime("%d/%m/%Y"), "date_iso": dt.date().isoformat(), "time": dt.strftime("%H:%M") + " COL"})
-    return out
-
-def upcoming(league, date):
-    try:
-        d = get_json(f"{BASE}/{LEAGUES[league]}/scoreboard?dates={date.replace('-', '')}")
-        rows = parse_upcoming_events(d, league)
-        if rows: return rows
-        all_d = get_json(f"{BASE}/all/scoreboard?dates={date.replace('-', '')}")
-        return [r for e in all_d.get("events", []) if classify_all_event(e) == league
-                for r in parse_upcoming_events({"events":[e]}, league)]
-    except Exception:
-        return []
-
-def main():
-    now = datetime.now(timezone.utc)
-    matches, seen = [], set()
-    for i in range(14):
-        day = (now + timedelta(days=i)).date().isoformat()
-        for league in LEAGUES:
-            for m in upcoming(league, day):
-                if m["id"] not in seen:
-                    seen.add(m["id"]); matches.append(m)
-    signals, reviewed = [], 0
-    for m in matches[:160]:
-        reviewed += 1
-        a, b = team_rows(m["league"], m["home_id"]), team_rows(m["league"], m["away_id"])
-        s = signal(m, a, b)
-        if s: signals.append(s)
-    signals.sort(key=lambda x: (x["prob"] > 0, x["prob"]), reverse=True)
-    out = {
-        "updated_at": datetime.now(timezone.utc).isoformat(),
-        "matches": signals, "reviewed": reviewed, "signals": sum(1 for x in signals if x["prob"] > 0),
-        "markets": 18, "competitions": len(set(m["league"] for m in matches)),
-        "source": "ESPN public soccer data + optional 365Scores player enrichment",
-        "model": "Recent-match rates + Poisson screen + player hit-rate filter; strongest market per match.",
-    }
-    os.makedirs("data", exist_ok=True)
-    with open("data/radar.json", "w", encoding="utf-8") as f:
-        json.dump(out, f, ensure_ascii=False, indent=2)
-    print(json.dumps({"reviewed": reviewed, "signals": len(signals), "competitions": out["competitions"]}))
-
-if __name__ == "__main__":
-    main()
